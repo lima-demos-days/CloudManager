@@ -1,0 +1,50 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" version="25.0.3">
+  <diagram name="Página-1" id="GQIOy_7uUVxj6Gp8jPgq">
+    <mxGraphModel dx="1080" dy="665" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="y2rXwNMQMggIRQUFI1h9-1" value="Usuario" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="140" y="280" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="y2rXwNMQMggIRQUFI1h9-2" value="" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;strokeWidth=1;perimeterSpacing=0;dashPattern=8 8;" vertex="1" parent="1">
+          <mxGeometry x="240" y="165" width="140" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="y2rXwNMQMggIRQUFI1h9-3" value="Aplicación bancaria" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="236.25" y="130" width="147.5" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="y2rXwNMQMggIRQUFI1h9-4" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="195" width="120" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="y2rXwNMQMggIRQUFI1h9-5" value="Monolito" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="280" y="165" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="y2rXwNMQMggIRQUFI1h9-6" value="Frontend" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="215" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="y2rXwNMQMggIRQUFI1h9-7" value="Servicio de Información" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="270" y="265" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="y2rXwNMQMggIRQUFI1h9-8" value="Simulador Crediticio" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="270" y="315" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="y2rXwNMQMggIRQUFI1h9-9" value="Servicio de crédito" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="270" y="365" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="y2rXwNMQMggIRQUFI1h9-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="y2rXwNMQMggIRQUFI1h9-1" target="y2rXwNMQMggIRQUFI1h9-4">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="247" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="y2rXwNMQMggIRQUFI1h9-11" value="DB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=0" vertex="1" parent="1">
+          <mxGeometry x="440" y="270" width="60" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="y2rXwNMQMggIRQUFI1h9-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="y2rXwNMQMggIRQUFI1h9-4" target="y2rXwNMQMggIRQUFI1h9-11">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="313" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
