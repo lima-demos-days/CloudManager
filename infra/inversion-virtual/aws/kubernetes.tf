@@ -19,6 +19,19 @@ module "Control-Cluster" {
   vpc_id     = module.Control-VPC.vpc_id
   subnet_ids = module.Control-VPC.private_subnets
 
+  eks_managed_node_groups = {
+    example = {
+      ami_type      = "AL2_x86_64"
+      instance_type = ["m6i.large"]
+
+      min_size = 1
+      max_size = 2
+      # This value is ignored after the initial creation
+      # https://github.com/bryantbiggs/eks-desired-size-hack
+      desired_size = 2
+    }
+  }
+
   tags = {
     Environment = "dev"
     Terraform   = "true"
