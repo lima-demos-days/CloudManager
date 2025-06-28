@@ -1,9 +1,9 @@
-module "Control-Cluster" {
+module "Manager-Cluster" {
   source  = "terraform-aws-modules/eks/aws"
   version = "20.37.1"
 
-  cluster_name    = "Control-Cluster"
-  cluster_version = "1.31"
+  cluster_name    = "Manager-Cluster"
+  cluster_version = "1.32"
 
   # Optional
   cluster_endpoint_public_access = true
@@ -16,11 +16,11 @@ module "Control-Cluster" {
     node_pools = ["general-purpose"]
   }
 
-  vpc_id     = module.Control-VPC.vpc_id
-  subnet_ids = module.Control-VPC.private_subnets
+  vpc_id     = module.Manager-VPC.vpc_id
+  subnet_ids = module.Manager-VPC.private_subnets
 
   eks_managed_node_groups = {
-    example = {
+    managing-workers = {
       ami_type      = "AL2_x86_64"
       instance_type = ["m6i.large"]
 
@@ -35,6 +35,6 @@ module "Control-Cluster" {
   tags = {
     Environment = "dev"
     Terraform   = "true"
-    Name = "Control-Cluster"
+    Name = "Manager-Cluster"
   }
 }

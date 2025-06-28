@@ -1,15 +1,15 @@
-module "Control-VPC" {
+module "Manager-VPC" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "~>5.13"
 
-  name = "Control-VPC"
+  name = "Manager-VPC"
   cidr = "10.0.0.0/16"
 
   azs             = ["us-east-1a", "us-east-1b"]
   private_subnets = ["10.0.0.0/24", "10.0.1.0/24"]
 
   tags = {
-    Name       = "Control-VPC"
+    Name       = "Manager-VPC"
     CostCenter = "Grupo Cibest"
   }
 }
