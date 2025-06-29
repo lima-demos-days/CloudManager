@@ -10,12 +10,9 @@ variable "clusters" {
       tags          = optional(map(string))
     })
     vpc = object({
-      name            = string
-      cidr            = string
-      azs             = list(string)
-      private_subnets = list(string)
-      public_subnets  = optional(list(string))
-      tags            = optional(map(string))
+      name = string
+      cidr = string
+      tags = optional(map(string))
     })
   }))
   default = []

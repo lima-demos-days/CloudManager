@@ -19,9 +19,12 @@ module "EKS" {
   # Optional: Adds the current caller identity as an administrator via cluster access entry
   enable_cluster_creator_admin_permissions = true
 
-  cluster_compute_config = {
-    enabled    = true
-    node_pools = each.value.node_pools
+  # EKS Addons
+  cluster_addons = {
+    coredns                = {}
+    eks-pod-identity-agent = {}
+    kube-proxy             = {}
+    vpc-cni                = {}
   }
 
   vpc_id     = module.VPCs[each.key].vpc_id
