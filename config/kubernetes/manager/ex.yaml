@@ -4,6 +4,7 @@ metadata:
   labels:
     run: ex
   name: ex
+  namespace: default
 spec:
   containers:
   - image: nginx
