@@ -2,7 +2,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: crossplane-release
-  namespace: flux-system
+  namespace: crossplane-system
 spec:
   interval: 10m
   chart:
@@ -12,5 +12,5 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: crossplane-helm-repo
-        namespace: flux-system
+        namespace: crossplane-system
       interval: 10m
