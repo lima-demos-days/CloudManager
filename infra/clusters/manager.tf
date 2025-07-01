@@ -13,7 +13,9 @@ data "aws_eks_cluster_auth" "manager-auth" {
   name       = local.cluster-name
 }
 
+
 resource "kubernetes_namespace" "flux_system" {
+  depends_on = [data.aws_eks_cluster_auth.manager-auth]
   metadata {
     name = "flux-system"
   }
@@ -42,6 +44,7 @@ resource "kubernetes_secret" "git_auth" {
 
 //------------Helm definition---------------------
 resource "helm_release" "flux_operator" {
+  depends_on = [kubernetes_secret.git_auth]
   name             = "flux-operator"
   namespace        = var.flux-setup.namespace
   repository       = var.flux-setup.flux_repository
@@ -92,5 +95,3 @@ resource "helm_release" "flux_instance" {
     }
   ]
 }
-
-
