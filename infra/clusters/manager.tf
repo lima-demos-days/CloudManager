@@ -1,16 +1,31 @@
 locals {
-  cluster-name = var.clusters[0].cluster_name
+  manager_name = var.clusters[0].cluster_name
+  spokes_names = [
+    for i in range(1, length(var.clusters)) :
+    var.clusters[i].cluster_name
+  ]
+  kubeconfigs = {
+    for name in local.spokes_names : # each cluster key
+    name => templatefile(
+      "${path.module}/templates/kubeconfig.tpl",
+      {
+        cluster_name     = name
+        cluster_endpoint = module.EKS[name].cluster_endpoint
+        cluster_ca_data  = module.EKS[name].cluster_certificate_authority_data # base64 cert
+      }
+    )
+  }
 }
 
-//------------EKS preparation---------------------
+//------------EKS and k8s preparation---------------------
 data "aws_eks_cluster" "manager" {
   depends_on = [module.EKS]
-  name       = local.cluster-name
+  name       = local.manager_name
 }
 
 data "aws_eks_cluster_auth" "manager-auth" {
   depends_on = [data.aws_eks_cluster.manager]
-  name       = local.cluster-name
+  name       = local.manager_name
 }
 
 
@@ -18,6 +33,18 @@ resource "kubernetes_namespace" "flux_system" {
   depends_on = [data.aws_eks_cluster_auth.manager-auth]
   metadata {
     name = "flux-system"
+  }
+
+  lifecycle {
+    ignore_changes = [metadata]
+  }
+}
+
+resource "kubernetes_namespace" "business_ns" {
+  depends_on = [data.aws_eks_cluster_auth.manager-auth]
+  for_each   = toset(local.spokes_names)
+  metadata {
+    name = lower(each.value)
   }
 
   lifecycle {
@@ -42,9 +69,25 @@ resource "kubernetes_secret" "git_auth" {
   type = "Opaque"
 }
 
+resource "kubernetes_secret" "business_k8s_secrets" {
+  depends_on = [kubernetes_namespace.flux_system]
+  for_each   = toset(local.spokes_names)
+
+  metadata {
+    name      = "cluster-kubeconfig"
+    namespace = lower(each.value)
+  }
+
+  data = {
+    value = local.kubeconfigs[each.value]
+  }
+
+  type = "Opaque"
+}
+
 //------------Helm definition---------------------
 resource "helm_release" "flux_operator" {
-  depends_on = [kubernetes_secret.git_auth]
+  depends_on       = [kubernetes_secret.git_auth]
   name             = "flux-operator"
   namespace        = var.flux-setup.namespace
   repository       = var.flux-setup.flux_repository
