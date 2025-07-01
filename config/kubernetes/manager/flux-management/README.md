@@ -1,3 +1,0 @@
-# Flux Management
-
-Especifica 
