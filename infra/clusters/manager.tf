@@ -24,13 +24,13 @@ data "aws_eks_cluster" "manager" {
 }
 
 data "aws_eks_cluster_auth" "manager-auth" {
-  depends_on = [data.aws_eks_cluster.manager]
+  depends_on = [module.EKS, data.aws_eks_cluster.manager]
   name       = local.manager_name
 }
 
 
 resource "kubernetes_namespace" "flux_system" {
-  depends_on = [data.aws_eks_cluster_auth.manager-auth]
+  depends_on = [module.EKS, data.aws_eks_cluster_auth.manager-auth]
   metadata {
     name = "flux-system"
   }

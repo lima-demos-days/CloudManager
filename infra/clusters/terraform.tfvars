@@ -36,7 +36,7 @@ clusters = [
     }
     vpc = {
       name = "Inversiones-VPC"
-      cidr = "10.0.0.0/16"
+      cidr = "192.0.0.0/16"
       tags = {
         Name       = "Inversiones-VPC"
         CostCenter = "Grupo Cibest"
