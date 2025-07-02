@@ -1,3 +1,17 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ns-admin
+  namespace: inversiones-cluster
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: inversiones-cluster
+---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
@@ -22,6 +36,7 @@ spec:
   prune: true
   wait: true
   path: ./kustomize
+  serviceAccountName: default
   sourceRef:
     kind: GitRepository
     name: podran-repo
