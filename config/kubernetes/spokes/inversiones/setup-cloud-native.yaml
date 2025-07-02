@@ -20,6 +20,9 @@ spec:
       GIT_URL: "https://github.com/jdarguello/CDT_Businessflow"
       GIT_REF: "refs/heads/main"
       FLUX_PATH: "infra/gitops"
+  kubeConfig:
+    secretRef:
+      name: cluster-kubeconfig
   patches:
     - target:
         kind: HelmRelease
@@ -50,6 +53,9 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
+  kubeConfig:
+    secretRef:
+      name: cluster-kubeconfig
   patches:
     - target:
         kind: HelmRelease
