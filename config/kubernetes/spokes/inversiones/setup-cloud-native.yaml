@@ -23,6 +23,7 @@ spec:
   kubeConfig:
     secretRef:
       name: cluster-kubeconfig
+      namespace: inversiones-cluster
   patches:
     - target:
         kind: HelmRelease
@@ -56,6 +57,7 @@ spec:
   kubeConfig:
     secretRef:
       name: cluster-kubeconfig
+      namespace: inversiones-cluster
   patches:
     - target:
         kind: HelmRelease
