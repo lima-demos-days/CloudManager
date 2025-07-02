@@ -34,38 +34,3 @@ spec:
             secretRef:
               name: cluster-kubeconfig
               namespace: inversiones-cluster
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: inversion-crossplane
-  namespace: inversiones-cluster
-spec:
-  dependsOn:
-    - name: inversion-flux
-      namespace: inversiones-cluster
-  targetNamespace: inversiones-cluster
-  interval: 3m
-  retryInterval: 1m
-  timeout: 2m
-  prune: true
-  wait: true
-  path: ./config/kubernetes/spokes/.cloud-native/crossplane
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-  #kubeConfig:
-  #  secretRef:
-  #    name: cluster-kubeconfig
-  #    namespace: inversiones-cluster
-  patches:
-    - target:
-        kind: HelmRelease
-      patch: |
-        - op: add
-          path: /spec/kubeConfig
-          value:
-            secretRef:
-              name: cluster-kubeconfig
-              namespace: inversiones-cluster
