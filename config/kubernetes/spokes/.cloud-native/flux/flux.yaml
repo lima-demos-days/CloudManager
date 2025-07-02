@@ -8,7 +8,7 @@ status: {}
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
-  name: flux-operator-spoke-helm-repo
+  name: flux-spoke-helm-repo
   namespace: flux-system
 spec:
   interval: 5m0s
@@ -22,7 +22,7 @@ metadata:
 spec:
   chartRef:
     kind: OCIRepository
-    name: flux-operator-spoke-helm-repo
+    name: flux-spoke-helm-repo
     namespace: flux-system
   chart:
     spec:
@@ -52,8 +52,12 @@ spec:
     namespace: flux-system
   chartRef:
     kind: OCIRepository
-    name: flux-instance-spoke-helm-repo
+    name: flux-spoke-helm-repo
     namespace: flux-system
+  chart:
+    spec:
+      chart: flux-operator
+      version: "0.23.0"
   interval: 10m
   values:
     instance:
