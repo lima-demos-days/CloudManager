@@ -8,11 +8,13 @@ status: {}
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
-  name: flux-spoke-helm-repo
+  name: flux-operator-spoke-helm-repo
   namespace: flux-system
 spec:
   interval: 5m0s
-  url: "oci://ghcr.io/controlplaneio-fluxcd/charts"
+  url: "oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator"
+  ref:
+    semver: ">= 0.23"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -22,12 +24,8 @@ metadata:
 spec:
   chartRef:
     kind: OCIRepository
-    name: flux-spoke-helm-repo
+    name: flux-operator-spoke-helm-repo
     namespace: flux-system
-  chart:
-    spec:
-      chart: flux-operator
-      version: "0.23.0"
   interval: 10m
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
@@ -39,7 +37,7 @@ spec:
   interval: 5m0s
   url: "oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance"
   ref:
-    tag: "0.23.0"
+    semver: ">= 0.23"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -52,12 +50,8 @@ spec:
     namespace: flux-system
   chartRef:
     kind: OCIRepository
-    name: flux-spoke-helm-repo
+    name: flux-instance-spoke-helm-repo
     namespace: flux-system
-  chart:
-    spec:
-      chart: flux-operator
-      version: "0.23.0"
   interval: 10m
   values:
     instance:
