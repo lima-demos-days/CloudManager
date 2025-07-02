@@ -25,7 +25,7 @@ spec:
   chartRef:
     kind: OCIRepository
     name: flux-operator-spoke-helm-repo
-    namespace: ${BUSINESS_NS}
+    namespace: flux-system
   interval: 10m
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
