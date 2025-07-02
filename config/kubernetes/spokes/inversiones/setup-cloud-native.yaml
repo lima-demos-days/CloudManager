@@ -2,10 +2,10 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: inversion-flux
-  namespace: flux-system
+  namespace: inversiones-cluster
 spec:
-  targetNamespace: flux-system
-  interval: 1h
+  targetNamespace: inversiones-cluster
+  interval: 3m
   retryInterval: 1m
   timeout: 2m
   prune: true
@@ -20,10 +20,10 @@ spec:
       GIT_URL: "https://github.com/jdarguello/CDT_Businessflow"
       GIT_REF: "refs/heads/main"
       FLUX_PATH: "infra/gitops"
-  kubeConfig:
-    secretRef:
-      name: cluster-kubeconfig
-      namespace: inversiones-cluster
+  #kubeConfig:
+  #  secretRef:
+  #    name: cluster-kubeconfig
+  #    namespace: inversiones-cluster
   patches:
     - target:
         kind: HelmRelease
@@ -39,13 +39,13 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: inversion-crossplane
-  namespace: flux-system
+  namespace: inversiones-cluster
 spec:
   dependsOn:
     - name: inversion-flux
-      namespace: flux-system
-  targetNamespace: flux-system
-  interval: 1h
+      namespace: inversiones-cluster
+  targetNamespace: inversiones-cluster
+  interval: 3m
   retryInterval: 1m
   timeout: 2m
   prune: true
@@ -55,10 +55,10 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  kubeConfig:
-    secretRef:
-      name: cluster-kubeconfig
-      namespace: inversiones-cluster
+  #kubeConfig:
+  #  secretRef:
+  #    name: cluster-kubeconfig
+  #    namespace: inversiones-cluster
   patches:
     - target:
         kind: HelmRelease
