@@ -21,7 +21,7 @@ spec:
   timeout: 5m
   prune: true
   wait: true
-  path: ./
+  path: ./kustomize
   sourceRef:
     kind: GitRepository
     name: podran-repo
