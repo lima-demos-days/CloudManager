@@ -1,17 +1,10 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: inversiones-cluster
-spec: {}
-status: {}
----
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: inversion-flux
-  namespace: inversiones-cluster
+  namespace: flux-system
 spec:
-  targetNamespace: inversiones-cluster
+  targetNamespace: flux-system
   interval: 1h
   retryInterval: 3m
   timeout: 5m
@@ -27,7 +20,6 @@ spec:
       GIT_URL: "https://github.com/jdarguello/CDT_Businessflow"
       GIT_REF: "refs/heads/main"
       FLUX_PATH: "infra/gitops"
-      BUSINESS_NS: inversiones-cluster
   patches:
     - target:
         kind: HelmRelease
@@ -43,12 +35,12 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: inversion-crossplane
-  namespace: inversiones-cluster
+  namespace: flux-system
 spec:
   dependsOn:
     - name: inversion-flux
-      namespace: inversiones-cluster
-  targetNamespace: inversiones-cluster
+      namespace: flux-system
+  targetNamespace: flux-system
   interval: 1h
   retryInterval: 3m
   timeout: 5m
