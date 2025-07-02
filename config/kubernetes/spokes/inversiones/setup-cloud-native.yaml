@@ -2,9 +2,9 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: inversion-flux
-  namespace: inversion-cluster
+  namespace: inversiones-cluster
 spec:
-  targetNamespace: inversion-cluster
+  targetNamespace: inversiones-cluster
   interval: 1h
   retryInterval: 3m
   timeout: 5m
@@ -34,12 +34,12 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: inversion-crossplane
-  namespace: inversion-cluster
+  namespace: inversiones-cluster
 spec:
   dependsOn:
     - name: inversion-flux
-      namespace: inversion-cluster
-  targetNamespace: inversion-cluster
+      namespace: inversiones-cluster
+  targetNamespace: inversiones-cluster
   interval: 1h
   retryInterval: 3m
   timeout: 5m
