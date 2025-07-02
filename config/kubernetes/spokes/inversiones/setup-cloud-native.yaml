@@ -4,7 +4,7 @@ metadata:
   name: inversion-flux
   namespace: inversiones-cluster
 spec:
-  targetNamespace: flux-system
+  targetNamespace: inversiones-cluster
   interval: 1h
   retryInterval: 3m
   timeout: 5m
@@ -41,7 +41,7 @@ spec:
   dependsOn:
     - name: inversion-flux
       namespace: inversiones-cluster
-  targetNamespace: flux-system
+  targetNamespace: inversiones-cluster
   interval: 1h
   retryInterval: 3m
   timeout: 5m
