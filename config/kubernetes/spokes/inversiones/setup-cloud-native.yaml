@@ -30,6 +30,7 @@ spec:
           value:
             secretRef:
               name: cluster-kubeconfig
+              namespace: inversiones-cluster
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -60,3 +61,4 @@ spec:
           value:
             secretRef:
               name: cluster-kubeconfig
+              namespace: inversiones-cluster
