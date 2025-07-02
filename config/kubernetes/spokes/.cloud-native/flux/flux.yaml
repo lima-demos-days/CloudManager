@@ -12,9 +12,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 5m0s
-  url: "oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator"
-  ref:
-    tag: "0.23.0"
+  url: "oci://ghcr.io/controlplaneio-fluxcd/charts"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -26,6 +24,10 @@ spec:
     kind: OCIRepository
     name: flux-operator-spoke-helm-repo
     namespace: flux-system
+  chart:
+    spec:
+      chart: flux-operator
+      version: "0.23.0"
   interval: 10m
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
