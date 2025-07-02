@@ -5,9 +5,9 @@ metadata:
   namespace: inversiones-cluster
 spec:
   targetNamespace: inversiones-cluster
-  interval: 3m
-  retryInterval: 1m
-  timeout: 2m
+  interval: 1h
+  retryInterval: 3m
+  timeout: 5m
   prune: true
   wait: true
   path: ./config/kubernetes/spokes/.cloud-native/flux
@@ -20,10 +20,10 @@ spec:
       GIT_URL: "https://github.com/jdarguello/CDT_Businessflow"
       GIT_REF: "refs/heads/main"
       FLUX_PATH: "infra/gitops"
-  kubeConfig:
-    secretRef:
-      name: cluster-kubeconfig
-      namespace: inversiones-cluster
+  #kubeConfig:
+  #  secretRef:
+  #    name: cluster-kubeconfig
+  #    namespace: inversiones-cluster
   patches:
     - target:
         kind: HelmRelease
