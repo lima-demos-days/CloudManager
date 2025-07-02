@@ -29,4 +29,3 @@ spec:
   kubeConfig:
     secretRef:
       name: cluster-kubeconfig
-      namespace: inversiones-cluster
