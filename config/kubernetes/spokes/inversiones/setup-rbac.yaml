@@ -1,0 +1,43 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: crossplane-provider-setup
+  namespace: inversiones-cluster
+spec:
+  targetNamespace: inversiones-cluster
+  interval: 1h
+  retryInterval: 3m
+  timeout: 5m
+  prune: true
+  wait: true
+  path: ./config/kubernetes/manager/flux-management/crossplane-providers/kubernetes
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  postBuild:
+    substitute:
+      CLUSTER-NS: inversiones-cluster
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: crossplane-rbac-setup
+  namespace: inversiones-cluster
+spec:
+  dependsOn:
+  - name: crossplane-provider-setup
+  targetNamespace: inversiones-cluster
+  interval: 1h
+  retryInterval: 3m
+  timeout: 5m
+  prune: true
+  wait: true
+  path: ./config/kubernetes/spokes/.cloud-native/rbac
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  postBuild:
+    substitute:
+      CLUSTER-NS: inversiones-cluster

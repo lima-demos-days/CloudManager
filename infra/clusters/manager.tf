@@ -12,6 +12,7 @@ locals {
         cluster_name     = name
         cluster_endpoint = module.EKS[name].cluster_endpoint
         cluster_ca_data  = module.EKS[name].cluster_certificate_authority_data # base64 cert
+        token            = data.aws_eks_cluster_auth.spokes_auth[name].token
       }
     )
   }
@@ -26,6 +27,12 @@ data "aws_eks_cluster" "manager" {
 data "aws_eks_cluster_auth" "manager-auth" {
   depends_on = [module.EKS, data.aws_eks_cluster.manager]
   name       = local.manager_name
+}
+
+data "aws_eks_cluster_auth" "spokes_auth" {
+  depends_on = [module.EKS, data.aws_eks_cluster.manager]
+  for_each   = toset(local.spokes_names)
+  name       = each.value
 }
 
 
