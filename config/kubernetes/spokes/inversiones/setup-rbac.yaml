@@ -17,7 +17,7 @@ spec:
     namespace: flux-system
   postBuild:
     substitute:
-      CLUSTER-NS: inversiones-cluster
+      CLUSTER_NS: inversiones-cluster
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -40,4 +40,4 @@ spec:
     namespace: flux-system
   postBuild:
     substitute:
-      CLUSTER-NS: inversiones-cluster
+      CLUSTER_NS: inversiones-cluster

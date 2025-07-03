@@ -1,7 +1,7 @@
 apiVersion: kubernetes.crossplane.io/v1alpha2
 kind: Object
 metadata:
-  name: ${CLUSTER-NS}-admin-ns
+  name: ${CLUSTER_NS}-admin-ns
   annotations:
     uptest.upbound.io/timeout: "60"
 spec:
@@ -14,12 +14,12 @@ spec:
         labels:
           example: "true"
   providerConfigRef:
-    name: ${CLUSTER-NS}-kubernetes-provider
+    name: ${CLUSTER_NS}-kubernetes-provider
 ---
 apiVersion: kubernetes.crossplane.io/v1alpha2
 kind: Object
 metadata:
-  name: ${CLUSTER-NS}-admin-sa
+  name: ${CLUSTER_NS}-admin-sa
   annotations:
     uptest.upbound.io/timeout: "60"
 spec:
@@ -31,12 +31,12 @@ spec:
         name: flux-admin
         namespace: admin
   providerConfigRef:
-    name: ${CLUSTER-NS}-kubernetes-provider
+    name: ${CLUSTER_NS}-kubernetes-provider
 ---
 apiVersion: kubernetes.crossplane.io/v1alpha2
 kind: Object
 metadata:
-  name: ${CLUSTER-NS}-admin-rolebinding
+  name: ${CLUSTER_NS}-admin-rolebinding
   annotations:
     uptest.upbound.io/timeout: "60"
 spec:
@@ -55,4 +55,4 @@ spec:
         name: flux-admin
         namespace: admin
   providerConfigRef:
-    name: ${CLUSTER-NS}-kubernetes-provider
+    name: ${CLUSTER_NS}-kubernetes-provider
