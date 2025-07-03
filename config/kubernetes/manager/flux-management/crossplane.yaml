@@ -30,7 +30,7 @@ spec:
         name: crossplane-helm-repo
         namespace: crossplane-system
       interval: 10m
-      values:
-        provider:
-          packages:
-          - xpkg.upbound.io/upbound/provider-kubernetes:v0.16.0
+  values:
+    provider:
+      packages:
+      - xpkg.upbound.io/upbound/provider-kubernetes:v0.16.0
