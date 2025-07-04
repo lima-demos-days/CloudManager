@@ -1,12 +1,13 @@
 apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
+kind: OCIRepository
 metadata:
   name: flux-operator-spoke-helm-repo
   namespace: flux-system
 spec:
-  type: "oci"
   interval: 5m0s
-  url: "oci://ghcr.io/controlplaneio-fluxcd/charts"
+  url: "oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator"
+  ref:
+    semver: ">= 0.23"
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -18,13 +19,10 @@ spec:
   storageNamespace: admin
   releaseName: admin
   serviceAccountName: flux-admin
-  chart:
-    spec:
-      chart: flux-operator
-      sourceRef:
-        kind: HelmRepository
-        name: flux-operator-spoke-helm-repo
-        namespace: flux-system
+  chartRef:
+    kind: OCIRepository
+    name: flux-operator-spoke-helm-repo
+    namespace: flux-system
   interval: 1m
   kubeConfig:
     secretRef:
