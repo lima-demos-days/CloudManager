@@ -11,17 +11,10 @@ spec:
   prune: true
   wait: true
   path: ./config/kubernetes/spokes/.cloud-native/flux
-  serviceAccountName: "flux-admin"
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
   postBuild:
     substitute:
-      GIT_URL: "https://github.com/jdarguello/CDT_Businessflow"
-      GIT_REF: "refs/heads/main"
-      FLUX_PATH: "infra/gitops"
-  kubeConfig:
-    secretRef:
-      name: cluster-kubeconfig
-      namespace: inversiones-cluster
+      SPOKE_NS: inversiones-cluster
