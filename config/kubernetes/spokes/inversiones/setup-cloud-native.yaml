@@ -25,12 +25,3 @@ spec:
     secretRef:
       name: cluster-kubeconfig
       namespace: inversiones-cluster
-  patches:
-    - target:
-        kind: HelmRelease
-      patch: |
-        - op: add
-          path: /spec/kubeConfig
-          value:
-            secretRef:
-              name: cluster-kubeconfig
