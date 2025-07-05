@@ -18,7 +18,8 @@ spec:
   targetNamespace: admin
   storageNamespace: admin
   releaseName: admin
-  serviceAccountName: flux-admin
+  install:
+    createNamespace: true
   chartRef:
     kind: OCIRepository
     name: flux-operator-spoke-helm-repo
