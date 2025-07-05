@@ -18,4 +18,4 @@ spec:
   postBuild:
     substitute:
       SPOKE_NS: inversiones-cluster
-      CROSSPLANE_PACKAGES: []
+      CROSSPLANE_PACKAGES: [""]
