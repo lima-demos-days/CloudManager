@@ -22,7 +22,7 @@ spec:
   chartRef:
     kind: OCIRepository
     name: flux-operator-spoke-helm-repo
-    namespace: flux-system
+    namespace: ${SPOKE_NS}
   interval: 1m
   kubeConfig:
     secretRef:
