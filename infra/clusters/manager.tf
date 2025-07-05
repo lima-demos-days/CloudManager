@@ -60,7 +60,7 @@ resource "kubernetes_namespace" "business_ns" {
 }
 
 resource "kubernetes_secret" "git_auth" {
-  count      = var.github-token != "" ? 1 : 0
+  count      = var.github_token != "" ? 1 : 0
   depends_on = [kubernetes_namespace.flux_system]
 
   metadata {
@@ -70,7 +70,7 @@ resource "kubernetes_secret" "git_auth" {
 
   data = {
     username = "git"
-    password = var.github-token
+    password = var.github_token
   }
 
   type = "Opaque"

@@ -22,14 +22,8 @@ variable "kubernetes-version" {
   default = "1.32"
 }
 
-variable "github-token" {
+variable "github_token" {
   type    = string
-  default = ""
-}
-
-variable "principal_arn" {
-  description = "IAM ARN that must be cluster-admin everywhere"
-  type        = string
 }
 
 variable "flux-setup" {
