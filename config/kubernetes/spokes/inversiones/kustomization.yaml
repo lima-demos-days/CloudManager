@@ -4,3 +4,4 @@ resources:
 - setup-rbac.yaml
 - setup-helmconfig.yaml
 - setup-flux.yaml
+- setup-crossplane.yaml
