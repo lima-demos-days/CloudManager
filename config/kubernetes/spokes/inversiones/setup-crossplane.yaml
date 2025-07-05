@@ -20,3 +20,4 @@ spec:
       SPOKE_NS: inversiones-cluster
       CROSSPLANE_PACKAGES:
       - xpkg.crossplane.io/crossplane-contrib/provider-aws:v0.39.0
+      - xpkg.upbound.io/crossplane-contrib/provider-sql:v0.9.0
