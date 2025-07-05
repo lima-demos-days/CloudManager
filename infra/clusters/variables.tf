@@ -27,6 +27,11 @@ variable "github-token" {
   default = ""
 }
 
+variable "principal_arn" {
+  description = "IAM ARN that must be cluster-admin everywhere"
+  type        = string
+}
+
 variable "flux-setup" {
   type = object({
     git_url         = string

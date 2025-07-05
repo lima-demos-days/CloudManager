@@ -15,8 +15,6 @@ metadata:
   name: flux-operator-spoke-helm-release
   namespace: ${SPOKE_NS}
 spec:
-  install:
-    createNamespace: true
   chartRef:
     kind: OCIRepository
     name: flux-operator-spoke-helm-repo
