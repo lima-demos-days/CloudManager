@@ -18,4 +18,5 @@ spec:
   postBuild:
     substitute:
       SPOKE_NS: inversiones-cluster
-      CROSSPLANE_PACKAGES: [""]
+      CROSSPLANE_PACKAGES:
+      - xpkg.crossplane.io/crossplane-contrib/provider-aws:v0.39.0
