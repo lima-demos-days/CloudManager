@@ -47,6 +47,17 @@ resource "kubernetes_namespace" "flux_system" {
   }
 }
 
+resource "kubernetes_namespace" "crossplane_system" {
+  depends_on = [module.EKS, data.aws_eks_cluster_auth.manager-auth]
+  metadata {
+    name = "crossplane-system"
+  }
+
+  lifecycle {
+    ignore_changes = [metadata]
+  }
+}
+
 resource "kubernetes_namespace" "business_ns" {
   depends_on = [data.aws_eks_cluster_auth.manager-auth]
   for_each   = toset(local.spokes_names)
@@ -90,6 +101,22 @@ resource "kubernetes_secret" "business_k8s_secrets" {
   }
 
   type = "Opaque"
+}
+
+resource "kubernetes_config_map" "crossplane_providers" {
+  depends_on = [kubernetes_namespace.crossplane_system]
+  for_each = toset(local.spokes_names)
+
+  metadata {
+    name      = "crossplane-providers"
+    namespace = "crossplane-system"
+  }
+
+  data = {
+    packages = <<-EOF
+      ${join("\n", var.crossplane_providers)}
+    EOF
+  }
 }
 
 //------------Helm definition---------------------

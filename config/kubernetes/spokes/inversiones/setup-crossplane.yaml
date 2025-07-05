@@ -16,8 +16,7 @@ spec:
     name: flux-system
     namespace: flux-system
   postBuild:
-    substitute:
-      SPOKE_NS: inversiones-cluster
-      CROSSPLANE_PACKAGES:
-      - xpkg.crossplane.io/crossplane-contrib/provider-aws:v0.39.0
-      - xpkg.upbound.io/crossplane-contrib/provider-sql:v0.9.0
+    substituteFrom:
+      kind: ConfigMap
+      name: Crossplane-providers
+      optional: true

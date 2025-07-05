@@ -17,6 +17,12 @@ variable "clusters" {
   default = []
 }
 
+variable "crossplane_providers" {
+  description = "List of Crossplane provider packages to install"
+  type        = list(string)
+  default     = []                # you can leave this empty or provide defaults here
+}
+
 variable "kubernetes-version" {
   type    = string
   default = "1.32"
