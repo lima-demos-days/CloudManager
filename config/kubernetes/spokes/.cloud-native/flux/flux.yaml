@@ -15,9 +15,6 @@ metadata:
   name: flux-operator-spoke-helm-release
   namespace: ${SPOKE_NS}
 spec:
-  targetNamespace: admin
-  storageNamespace: admin
-  releaseName: admin
   install:
     createNamespace: true
   chartRef:
