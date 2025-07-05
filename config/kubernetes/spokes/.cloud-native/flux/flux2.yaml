@@ -1,0 +1,26 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: flux-operator-spoke-helm-repo
+  namespace: ${SPOKE_NS}
+spec:
+  interval: 5m0s
+  url: "oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator"
+  ref:
+    semver: ">= 0.23"
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: flux-operator-spoke-helm-release
+  namespace: ${SPOKE_NS}
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: flux-operator-spoke-helm-repo
+    namespace: ${SPOKE_NS}
+  interval: 1m
+  kubeConfig:
+    secretRef:
+      name: cluster-kubeconfig
+      key: value

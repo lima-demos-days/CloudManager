@@ -34,3 +34,4 @@ spec:
     provider:
       packages:
       - xpkg.upbound.io/upbound/provider-kubernetes:v0.16.0
+      - xpkg.upbound.io/upbound/provider-helm:v0.20.0
