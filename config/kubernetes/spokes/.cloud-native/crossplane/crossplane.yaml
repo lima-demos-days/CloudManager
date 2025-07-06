@@ -11,6 +11,6 @@ spec:
     namespace: crossplane-system
     values: 
       provider:
-        packages: ${CROSSPLANE_PACKAGES}
+        packages: ${packages}
   providerConfigRef:
     name: ${SPOKE_NS}-helm-provider

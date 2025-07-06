@@ -16,7 +16,9 @@ spec:
     name: flux-system
     namespace: flux-system
   postBuild:
+    substitute:
+      SPOKE_NS: inversiones-cluster
     substituteFrom:
     - kind: ConfigMap
-      name: Crossplane-providers
+      name: crossplane-providers
       optional: true
