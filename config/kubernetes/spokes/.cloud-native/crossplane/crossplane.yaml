@@ -7,7 +7,7 @@ spec:
     chart:
       name: crossplane
       repository: "https://charts.crossplane.io/preview"
-      version: v2.0.0-preview.1
+      version: 2.0.0-preview.1
     namespace: crossplane-system
     values: 
       provider:
