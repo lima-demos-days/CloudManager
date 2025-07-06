@@ -1,0 +1,32 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: spoke-repo
+  namespace: ${SPOKE_NS}
+spec:
+  interval: 5m0s
+  url: ${GIT_URL}
+  ref:
+    branch: ${GIT_REF}
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: spoke-app
+  namespace: ${SPOKE_NS}
+spec:
+  targetNamespace: ${SPOKE_NS}
+  interval: 1h
+  retryInterval: 3m
+  timeout: 5m
+  prune: true
+  wait: true
+  path: ${FLUX_PATH}
+  sourceRef:
+    kind: GitRepository
+    name: spoke-repo
+    namespace: ${SPOKE_NS}
+  kubeConfig:
+    secretRef:
+      name: cluster-kubeconfig
