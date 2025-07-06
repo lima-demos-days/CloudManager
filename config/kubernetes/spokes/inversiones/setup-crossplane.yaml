@@ -17,6 +17,6 @@ spec:
     namespace: flux-system
   postBuild:
     substituteFrom:
-      kind: ConfigMap
+    - kind: ConfigMap
       name: Crossplane-providers
       optional: true
