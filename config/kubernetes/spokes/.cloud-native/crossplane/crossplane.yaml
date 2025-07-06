@@ -5,7 +5,7 @@ metadata:
 spec:
   forProvider:
     chart:
-      name: flux-instance
+      name: crossplane
       repository: "https://charts.crossplane.io/preview"
       version: v2.0.0-preview.1
     namespace: crossplane-system
