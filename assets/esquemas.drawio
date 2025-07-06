@@ -678,11 +678,10 @@
         <mxCell id="_T1gYVgo9Ru7o60czetP-59" value="Inversion Virtual" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Git_icon.svg/2048px-Git_icon.svg.png;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="1029.9" y="285.37" width="35" height="35" as="geometry" />
         </mxCell>
-        <mxCell id="dAKJvTSOqXFlYgcyMs-w-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="dAKJvTSOqXFlYgcyMs-w-1" target="_T1gYVgo9Ru7o60czetP-59" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="dAKJvTSOqXFlYgcyMs-w-1" value="Ingeniero Software" style="sketch=0;aspect=fixed;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;fillColor=#00188D;shape=mxgraph.azure.laptop" parent="1" vertex="1">
-          <mxGeometry x="1160" y="287.87" width="50" height="30" as="geometry" />
+        <mxCell id="dAKJvTSOqXFlYgcyMs-w-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" target="_T1gYVgo9Ru7o60czetP-59" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1160" y="302.8699999999999" as="sourcePoint" />
+          </mxGeometry>
         </mxCell>
         <mxCell id="dAKJvTSOqXFlYgcyMs-w-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fillColor=#ffe6cc;strokeColor=#d79b00;dashed=1;strokeWidth=1.5;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" parent="1" source="RoNvlP9hJoxrDg2FSeLb-7" target="_T1gYVgo9Ru7o60czetP-59" edge="1">
           <mxGeometry relative="1" as="geometry">
@@ -759,6 +758,15 @@
         </mxCell>
         <mxCell id="_7Q-3_wNwE5NJ6zuOCHR-7" value="&lt;app-repo&gt;" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Git_icon.svg/2048px-Git_icon.svg.png;fontStyle=1" vertex="1" parent="1">
           <mxGeometry x="1030" y="370" width="35" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="_7Q-3_wNwE5NJ6zuOCHR-8" value="IT Leader" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn1.iconfinder.com/data/icons/business-488/128/6-128.png" vertex="1" parent="1">
+          <mxGeometry x="1161.5" y="271" width="49.37" height="49.37" as="geometry" />
+        </mxCell>
+        <mxCell id="_7Q-3_wNwE5NJ6zuOCHR-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="_7Q-3_wNwE5NJ6zuOCHR-9" target="_7Q-3_wNwE5NJ6zuOCHR-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_7Q-3_wNwE5NJ6zuOCHR-9" value="Ingeniero Software" style="sketch=0;aspect=fixed;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;fillColor=#00188D;shape=mxgraph.azure.laptop" vertex="1" parent="1">
+          <mxGeometry x="1161.5" y="372.5" width="50" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
