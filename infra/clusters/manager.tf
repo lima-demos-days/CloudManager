@@ -109,7 +109,7 @@ resource "kubernetes_config_map" "crossplane_providers" {
 
   metadata {
     name      = "crossplane-providers"
-    namespace = "crossplane-system"
+    namespace = lower(each.value)
   }
 
   data = {
