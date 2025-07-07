@@ -16,20 +16,31 @@ spec:
           - name: refresh
             image: bitnami/kubectl:latest
             command:
-            - /bin/sh
-            - -c
-            - |
-              NEW_TOKEN=$(kubectl create token flux-admin -n ${SPOKE_NS})
-              USER="flux-admin"
-              CONTEXT="flux-admin@kubernetes"
+            - /bin/bash
+              - -c
+              - |
+                set -euxo pipefail
 
-              kubectl get secret cluster-kubeconfig -n ${SPOKE_NS} \
-                -o jsonpath='{.data.value}' | base64 -d \
-              | jq --arg tok "$NEW_TOKEN" '.users[0].user.token = $tok' \
-              | jq --arg user "$USER" '.users[0].name = $user' \
-              | jq --arg user "$USER" '.contexts[0].context.user = $user' \
-              | jq --arg context "$CONTEXT" '.contexts[0].name = $context' \
-              | kubectl create secret generic cluster-kubeconfig -n ${SPOKE_NS} \
-                  --from-file=value=/dev/stdin \
-                  --dry-run=client -o yaml \
-              | kubectl apply -f -
+                # 1) open the remote kubeconfig via process-substitution
+                REMOTE_KUBECONFIG=<( \
+                  kubectl get secret cluster-kubeconfig -n ${SPOKE_NS} \
+                    -o jsonpath='{.data.value}' | base64 -d \
+                )
+
+                # 2) generate a new token against that remote cluster
+                NEW_TOKEN=$(kubectl --kubeconfig="$REMOTE_KUBECONFIG" \
+                  create token flux-admin -n admin)
+
+                # 3) patch the kubeconfig in the Secret so its next user has the fresh token
+                kubectl get secret cluster-kubeconfig -n ${SPOKE_NS} \
+                  -o jsonpath='{.data.value}' | base64 -d \
+                | jq --arg tok "$NEW_TOKEN" '
+                    .users[0].user.token = $tok
+                  | .users[0].name = "flux-admin"
+                  | .contexts[0].context.user = "flux-admin"
+                  | .contexts[0].name = "flux-admin@kubernetes"
+                ' \
+                | kubectl create secret generic cluster-kubeconfig -n ${SPOKE_NS} \
+                    --from-file=value=/dev/stdin \
+                    --dry-run=client -o yaml \
+                | kubectl apply -f -
