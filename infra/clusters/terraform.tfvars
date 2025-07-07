@@ -42,6 +42,28 @@ clusters = [
         CostCenter = "Grupo Cibest"
       }
     }
+  },
+  {
+    cluster_name = "Cuentas-Cluster"
+    cluster_config = {
+      instance_type = ["m6i.large"]
+      min_size      = 1
+      max_size      = 2
+      desired_size  = 1
+      tags = {
+        Environment = "dev"
+        Terraform   = "true"
+        Name        = "Cuentas-Cluster"
+      }
+    }
+    vpc = {
+      name = "Cuentas-VPC"
+      cidr = "172.0.0.0/16"
+      tags = {
+        Name       = "Cuentas-VPC"
+        CostCenter = "Grupo Cibest"
+      }
+    }
   }
 ]
 
