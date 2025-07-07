@@ -38,7 +38,6 @@ spec:
                   .users[0].user.token = $tok
                 | .users[0].name = "flux-admin"
                 | .contexts[0].context.user = "flux-admin"
-                | .contexts[0].name = "flux-admin@kubernetes"
               ' \
               | kubectl create secret generic cluster-kubeconfig -n ${SPOKE_NS} \
                   --from-file=value=/dev/stdin \
