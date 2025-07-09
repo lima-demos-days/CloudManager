@@ -7,8 +7,8 @@ metadata:
 spec:
   type: business-area
   profile:
-    displayName: Infrastructure
-    email: infrastructure@example.com
+    displayName: EVC Inversiones
+    email: inversiones@banco.com.co
     picture: https://example.com/groups/bu-infrastructure.jpeg
   parent: transacciones
   children: [evc-inversiones]
