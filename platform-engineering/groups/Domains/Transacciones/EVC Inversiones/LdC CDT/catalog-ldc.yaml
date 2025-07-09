@@ -1,0 +1,15 @@
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: ldc-CDT
+  description: Unidad de negocio enfocada en mantener los flujos de expedición y administración de CDTs
+  namespace: transacciones
+spec:
+  type: business-unit
+  profile:
+    displayName: Infrastructure
+    email: infrastructure@example.com
+    picture: https://example.com/groups/bu-infrastructure.jpeg
+  parent: evc-inversiones
+  #children: [evc-inversiones]
+  members: [jdoe]

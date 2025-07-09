@@ -1,0 +1,7 @@
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: transacciones
+  description: Incluye todos los flujos de negocio (businessflows) transaccionales (inversiones, consignción/retiro, etc).
+spec:
+  owner: entorno-transacciones

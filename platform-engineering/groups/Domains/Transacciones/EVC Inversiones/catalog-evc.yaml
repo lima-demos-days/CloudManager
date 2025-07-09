@@ -1,0 +1,15 @@
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: evc-inversiones
+  description: Área de negocio enfocada en mantener diferentes tipos de inversión (CDT, bolsa de valores, activos, etc)
+  namespace: transacciones
+spec:
+  type: business-area
+  profile:
+    displayName: Infrastructure
+    email: infrastructure@example.com
+    picture: https://example.com/groups/bu-infrastructure.jpeg
+  parent: transacciones
+  children: [evc-inversiones]
+  members: [jdoe]
