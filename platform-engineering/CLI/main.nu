@@ -1,0 +1,9 @@
+#!/usr/bin/env nu
+# ───────────────────────────────────────────────────────────────
+# main.nu — Custom CLI para el manejo de operaciones de 
+#            Platform-engineering 
+# ───------------------------------------------------------------
+
+source infra/setup.nu
+
+def main [] {}
