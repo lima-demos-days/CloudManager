@@ -7,6 +7,7 @@
 source infra/spokes.nu
 source github/new_businessflow.nu
 source github/new_micro.nu
+source backstage/crossplane-integration.nu
 
 def main [] {}
 
@@ -31,6 +32,7 @@ def "main spoke new" [
 
 def "main spoke delete" [
     --name: string                  #Nombre del spoke
+    
 ] {
     #1. Eliminar infraestructura
     main infra delete-spoke --cluster-name=$"($name)-Cluster" 
