@@ -23,9 +23,10 @@ def "main spoke new" [
     main github new-businessflow --name=$name --description=$description
 
     #2. Levantar infraestructura (EKS)
-    main infra new-spoke --cluster-name=$"($name)-Cluster" --min-size=$min_size --max-size=$max_size --desired-state=$desired_state --instance-type=$instance_type --cidr=$cidr
+    main infra new-spoke --cluster-name=$"($name)-Cluster" --min-size=$min_size --max-size=$max_size --desired-size=$desired_size --instance-type=$instance_type --cidr=$cidr
 
     #3. Registrar spoke en el Software Catalog (Backstage)
+
 }
 
 def "main spoke delete" [
@@ -44,5 +45,5 @@ def "main micro new" [
     #1. Crear el repositorio
 
     #2. Registrar el micro con el System (Backstage)
-    
+
 }
