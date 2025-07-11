@@ -5,5 +5,6 @@
 # ───------------------------------------------------------------
 
 source infra/setup.nu
+source infra/spokes.nu
 
 def main [] {}

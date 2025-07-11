@@ -7,8 +7,11 @@ Usage:
     manager infra <parameter>
 
 Parameters:
-    setup:      Levanta la infraestructura base (VPCs, subnets y clusters EKS)
-    teardown:   Destruye toda la infraestructura del proyecto.
+    setup:          Levanta la infraestructura base (VPCs, subnets y clusters EKS)
+    teardown:       Destruye toda la infraestructura del proyecto.
+
+Flags:
+    --dry-run       Especifica si sólo desea planear la acción sin ejecutarla
 "
     )
 }
@@ -20,16 +23,15 @@ def --env "main infra setup" [
     cd ../../infra/clusters
     #2. Ejecutar el plan de Terraform ($dry_run == "client")
     if $dry_run == "client" {
-        terraform plan --var=github-token=$env.GITHUB_TOKEN
+        terraform plan --var=github_token=$env.GITHUB_TOKEN
     }
     #3. Ejecutar terraform (($dry_run == "server"))
-    print $"A levantar! ($current_dir)"
+    if $dry_run == "server" {
+        terraform apply --var=github_token=$env.GITHUB_TOKEN -auto-approve
+    }
 }
 
-def "main infra new-spoke" [] {
-
-}
-
-def "main infra delete-spoke" [] {
-
+def --env "main infra teardown" [] {
+    cd ../../infra/clusters
+    terraform destroy --var=github_token=$env.GITHUB_TOKEN -auto-approve
 }
