@@ -67,5 +67,5 @@ def "main infra delete-spoke" [
     #5. Guardar y ejecutar el update
     {"clusters": $new_list} | save clusters.auto.tfvars.json --force
     
-    main infra teardown
+    main infra setup    #Se eliminó el spoke de la lista, se ejecuta Terraform para reconciliar
 }

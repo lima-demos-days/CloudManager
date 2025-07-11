@@ -4,7 +4,45 @@
 #            Platform-engineering 
 # ───------------------------------------------------------------
 
-source infra/setup.nu
 source infra/spokes.nu
+source github/new_businessflow.nu
+source github/new_micro.nu
 
 def main [] {}
+
+def "main spoke new" [
+    --name: string                  #Nombre del spoke
+    --description:string = ""       #(Opcional) Descripción del spoke
+    --min-size=1                    #Mínimo número de nodos
+    --max-size=2                    #Máximo número de nodos
+    --desired-size=1                #Tamaño deseado
+    --instance-type="m6i.large"     #Tipo de instancias
+    --cidr="172.0.0.0/16"           #CIDR de la VPC
+] {
+    #1. Creación del repo
+    main github new-businessflow --name=$name --description=$description
+
+    #2. Levantar infraestructura (EKS)
+    main infra new-spoke --cluster-name=$"($name)-Cluster" --min-size=$min_size --max-size=$max_size --desired-state=$desired_state --instance-type=$instance_type --cidr=$cidr
+
+    #3. Registrar spoke en el Software Catalog (Backstage)
+}
+
+def "main spoke delete" [
+    --name: string                  #Nombre del spoke
+] {
+    #1. Eliminar infraestructura
+    main infra delete-spoke --cluster-name=$"($name)-Cluster" 
+
+    #2. Eliminar registro del spoke en el Software Catalog (Backstage)
+}
+
+def "main micro new" [
+    --spoke-name:string             #Nombre del spoke
+    --micro-name:string             #Nombre del microservicio
+] {
+    #1. Crear el repositorio
+
+    #2. Registrar el micro con el System (Backstage)
+    
+}
