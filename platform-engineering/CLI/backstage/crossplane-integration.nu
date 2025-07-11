@@ -126,7 +126,7 @@ backend.start();`
 
     cd $current_directory
 
-    get cluster data --create_service_account true
+    main get cluster data --create_service_account true
 
     $"export NODE_OPTIONS=--no-node-snapshot\n" | save --append .env
 
@@ -200,13 +200,12 @@ def --env "main apply backstage" [
     tag: string                                   # Available versions can be seen at https://github.com/users/vfarcic/packages/container/idp-full-backstage%2Fbackstage/versions
     --kubeconfig = "kubeconfig-dot.yaml"
     --ingress_host = "backstage.127.0.0.1.nip.io"
-    --github_token = "FIXME"
     --create_service_account = false
     --disable_default_workload_types = false
 ] {
 
     let cluster_data = (
-        get cluster data  
+        main get cluster data  
             --kubeconfig $kubeconfig
             --create_service_account $create_service_account
     )
@@ -223,7 +222,7 @@ def --env "main apply backstage" [
             KUBE_URL: ($cluster_data.kube_url | encode base64)
             KUBE_SA_TOKEN: $cluster_data.token_encoded
             KUBE_CA_DATA: ($cluster_data.kube_ca_data | encode base64)
-            GITHUB_TOKEN: ($github_token | encode base64)
+            GITHUB_TOKEN: ($env.GITHUB_TOKEN | encode base64)
         }
     }
         | to yaml
@@ -252,10 +251,15 @@ def --env "main apply backstage" [
 
 }
 
-def "get cluster data" [
+def "main get cluster data" [
     --kubeconfig = "kubeconfig-dot.yaml"
     --create_service_account = false
+    --backstage-directory:string = "../IdP/CloudManager-IdP/cloud-manager/"
 ] {
+
+    let current_directory = pwd
+    cp $kubeconfig ($backstage_directory + $kubeconfig)
+    cd $backstage_directory
 
     if $create_service_account {
 
@@ -326,6 +330,9 @@ def "get cluster data" [
 
     let token = ($token_encoded | decode base64 | decode)
     $"export KUBE_SA_TOKEN=($token)\n" | save --append .env
+
+    rm $kubeconfig
+    cd $current_directory
 
     {
         kube_url: $kube_url,
