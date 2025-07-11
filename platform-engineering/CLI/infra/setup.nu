@@ -20,6 +20,7 @@ def --env "main infra setup" [
     --dry-run="server"      #Define si se aplica la infraestructura o sólo el plan de Terraform
 ] {
     #1. Ir al directorio de infra
+    let current_directory = pwd
     cd ../../infra/clusters
     #2. Ejecutar el plan de Terraform ($dry_run == "client")
     if $dry_run == "client" {
@@ -29,6 +30,8 @@ def --env "main infra setup" [
     if $dry_run == "server" {
         terraform apply --var=github_token=$env.GITHUB_TOKEN -auto-approve
     }
+    #4. Regresa al directorio base del CLI
+    cd $current_directory
 }
 
 def --env "main infra teardown" [] {

@@ -4,12 +4,28 @@
 #            Platform-engineering 
 # ───------------------------------------------------------------
 
+source aws/kubeconfig.nu
 source infra/spokes.nu
 source github/new_businessflow.nu
 source github/new_micro.nu
 source backstage/crossplane-integration.nu
 
 def main [] {}
+
+def "main manager setup" [
+    --cluster-name:string = "Manager-Cluster"
+    --region:string = "us-east-1"
+    --kube-out:string = "kubeconfig-dot.yaml"
+] {
+    #1. Crear infraestructura base con Terraform
+    main infra setup
+
+    #2. Configura el kubeconfig del 'Manager-Cluster'
+    main aws get-kubeconfig
+
+    #3. Configura el sa del cluster para integrarlo con backstage
+    get cluster data --create_service_account=true
+}
 
 def "main spoke new" [
     --name: string                  #Nombre del spoke
@@ -32,7 +48,7 @@ def "main spoke new" [
 
 def "main spoke delete" [
     --name: string                  #Nombre del spoke
-    
+
 ] {
     #1. Eliminar infraestructura
     main infra delete-spoke --cluster-name=$"($name)-Cluster" 

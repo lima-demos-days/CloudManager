@@ -1,11 +1,9 @@
-def --env "backstage integrate crossplane" [] {
+def --env "main configure backstage" [
+    --backstage-directory:string = "../IdP/CloudManager-IdP/cloud-manager"
+] {
 
-
-    rm --force --recursive backstage
-
-    npx @backstage/create-app@latest
-
-    cd backstage
+    let current_directory = pwd
+    cd $backstage_directory
 
     for package in [
         "@terasky/backstage-plugin-crossplane-common@1.1.0",
@@ -126,10 +124,214 @@ backend.add(import('@terasky/backstage-plugin-scaffolder-backend-module-terasky-
 backend.start();`
         ) | save packages/backend/src/index.ts --force
 
-    #cd ..
+    cd $current_directory
 
-    #get cluster data --create_service_account true
+    get cluster data --create_service_account true
 
-    #$"export NODE_OPTIONS=--no-node-snapshot\n" | save --append .env
+    $"export NODE_OPTIONS=--no-node-snapshot\n" | save --append .env
+
+}
+
+def --env "main build backstage" [
+    tag: string
+    --image = "ghcr.io/jdarguello/idp-full-backstage"
+    --github_org = "jdarguello"
+] {
+
+    docker login $image
+
+    cd backstage
+
+    yarn install --immutable
+
+    yarn tsc
+
+    yarn build:backend
+
+    (
+        docker buildx build
+            --file packages/backend/Dockerfile
+            --tag $"($image):($tag)"
+            --platform linux/amd64
+            .
+    )
+
+    docker image push $"($image):($tag)"
+
+    cd ..
+
+    open charts/backstage/Chart.yaml
+        | upsert version $tag
+        | upsert appVersion $tag
+        | save charts/backstage/Chart.yaml --force
+
+    open charts/backstage/values.yaml
+        | upsert image.repository $image
+        | upsert image.tag $tag
+        | save charts/backstage/values.yaml --force
+
+    helm package charts/backstage
+
+    helm push $"backstage-($tag).tgz" $"oci://ghcr.io/($image)"
+
+    start $"https://github.com/users/($github_org)/packages/container/package/idp-full-backstage"
+
+    print $"
+Click (ansi yellow_bold)Package settings(ansi reset).
+Click the (ansi yellow_bold)Change visibility(ansi reset) button, select (ansi yellow_bold)Public(ansi reset), type (ansi yellow_bold)idp-full-backstage(ansi reset) to confirm, and click the (ansi yellow_bold)I understand the consequences, change package visibility(ansi reset) button.
+Press the (ansi yellow_bold)enter key(ansi reset) to continue.
+"
+    input
+
+    start $"https://github.com/users/($github_org)/packages/container/package/idp-full-backstage%2Fbackstage"
+
+    print $"
+Click (ansi yellow_bold)Package settings(ansi reset).
+Click the (ansi yellow_bold)Change visibility(ansi reset) button, select (ansi yellow_bold)Public(ansi reset), type (ansi yellow_bold)idp-full-backstage/backstage(ansi reset) to confirm, and click the (ansi yellow_bold)I understand the consequences, change package visibility(ansi reset) button.
+Press the (ansi yellow_bold)enter key(ansi reset) to continue.
+"
+    input
+
+    rm $"backstage-($tag).tgz"
+
+}
+
+def --env "main apply backstage" [
+    tag: string                                   # Available versions can be seen at https://github.com/users/vfarcic/packages/container/idp-full-backstage%2Fbackstage/versions
+    --kubeconfig = "kubeconfig-dot.yaml"
+    --ingress_host = "backstage.127.0.0.1.nip.io"
+    --github_token = "FIXME"
+    --create_service_account = false
+    --disable_default_workload_types = false
+] {
+
+    let cluster_data = (
+        get cluster data  
+            --kubeconfig $kubeconfig
+            --create_service_account $create_service_account
+    )
+
+    {
+        apiVersion: "v1"
+        kind: "Secret"
+        metadata: {
+            name: "backstage-config"
+            namespace: "backstage"
+        }
+        type: "Opaque"
+        data: {
+            KUBE_URL: ($cluster_data.kube_url | encode base64)
+            KUBE_SA_TOKEN: $cluster_data.token_encoded
+            KUBE_CA_DATA: ($cluster_data.kube_ca_data | encode base64)
+            GITHUB_TOKEN: ($github_token | encode base64)
+        }
+    }
+        | to yaml
+        | kubectl --namespace backstage apply --filename -
+
+    (
+        helm upgrade --install cnpg cloudnative-pg
+            --repo https://cloudnative-pg.github.io/charts
+            --namespace cnpg-system --create-namespace --wait
+    )
+
+    (
+        helm upgrade --install backstage
+            oci://ghcr.io/vfarcic/idp-full-backstage/backstage
+            --namespace backstage --create-namespace
+            --set $"ingress.host=($ingress_host)"
+            --set $"ingrestor.disableDefaultWorkloadTypes=($disable_default_workload_types)"
+            --version $tag --wait
+    )
+
+    sleep 60sec
+
+    print $"Backstage is available at (ansi yellow_bold)http://($ingress_host)(ansi reset)"
+
+    start $"http://($ingress_host)"
+
+}
+
+def "get cluster data" [
+    --kubeconfig = "kubeconfig-dot.yaml"
+    --create_service_account = false
+] {
+
+    if $create_service_account {
+
+        {
+            apiVersion: "v1"
+            kind: "Namespace"
+            metadata: {
+                name: "backstage"
+            }
+        } | to yaml | kubectl apply --filename -
+
+        {
+            apiVersion: "v1"
+            kind: "ServiceAccount"
+            metadata: {
+                name: "backstage"
+                namespace: "backstage"
+            }
+        } | to yaml | kubectl apply --filename -
+
+        {
+            apiVersion: "v1"
+            kind: "Secret"
+            metadata: {
+                name: "backstage"
+                namespace: "backstage"
+                annotations: {
+                    "kubernetes.io/service-account.name": "backstage"
+                }
+            }
+            type: "kubernetes.io/service-account-token"
+        } | to yaml | kubectl apply --filename -
+
+        {
+            apiVersion: "rbac.authorization.k8s.io/v1"
+            kind: "ClusterRoleBinding"
+            metadata: {
+                name: "backstage"
+            }
+            subjects: [{
+                kind: "ServiceAccount"
+                name: "backstage"
+                namespace: "backstage"
+            }]
+            roleRef: {
+                kind: "ClusterRole"
+                name: "cluster-admin"
+                apiGroup: "rbac.authorization.k8s.io"
+            }
+        } | to yaml | kubectl apply --filename -
+
+    }
+
+    let kube_url = open $kubeconfig
+        | get clusters.0.cluster.server
+    $"export KUBE_URL=($kube_url)\n" | save --append .env
+
+    let kube_ca_data = open $kubeconfig
+        | get clusters.0.cluster.certificate-authority-data
+    $"export KUBE_CA_DATA=($kube_ca_data)\n" | save --append .env
+
+    let token_encoded = (
+        kubectl --namespace backstage get secret backstage
+            --output yaml
+    )
+        | from yaml
+        | get data.token
+
+    let token = ($token_encoded | decode base64 | decode)
+    $"export KUBE_SA_TOKEN=($token)\n" | save --append .env
+
+    {
+        kube_url: $kube_url,
+        kube_ca_data: $kube_ca_data,
+        token_encoded: $token_encoded,
+        token: $token
+    }
 
 }
