@@ -7,9 +7,6 @@ def --env "main flux new-spoke" [
     --git-ref:string
     --git-branch:string
     --flux-path:string
-    --pr-title:string
-    --pr-body:string
-
 ] {
     #1. Entrar a la sección de 'config'
     let current_directory = pwd
@@ -47,7 +44,7 @@ def --env "main flux new-spoke" [
     $spoke_management | save spoke-manegement.yaml --force
 
     #5. Subir los cambios al repo
-    main github push --title $pr_title --body $pr_body
+    main github push manager --spoke-name $spoke_name
 
     #6. Regresar al directorio original
     cd $current_directory
