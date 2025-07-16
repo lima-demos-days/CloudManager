@@ -9,6 +9,8 @@ source infra/spokes.nu
 source github/new_businessflow.nu
 source github/new_micro.nu
 source backstage/crossplane-integration.nu
+source crossplane/creds.nu
+source utils.nu
 
 def main [] {}
 
@@ -29,9 +31,16 @@ def "main manager setup" [
     #4. 
 }
 
-def "main spoke new" [
-    --name: string                  #Nombre del spoke
-    --description:string = ""       #(Opcional) Descripción del spoke
+#Registro de flujos de negocio ya existentes
+def "main businessflow register" [
+
+] {
+
+}
+
+def "main businessflow new" [
+    --name: string                  #Nombre del flujo de negocio
+    --description:string = ""       #(Opcional) Descripción del flujo de negocio
     --min-size=1                    #Mínimo número de nodos
     --max-size=2                    #Máximo número de nodos
     --desired-size=1                #Tamaño deseado
@@ -44,12 +53,15 @@ def "main spoke new" [
     #2. Levantar infraestructura (EKS)
     main infra new-spoke --cluster-name=$"($name)-Cluster" --min-size=$min_size --max-size=$max_size --desired-size=$desired_size --instance-type=$instance_type --cidr=$cidr
 
-    #3. Registrar spoke en el Software Catalog (Backstage)
+    #3. (Config) Credenciales de aws para generación de recursos con Crossplane
+    main crossplane set-creds --businessflow-name=$name
+    
+    #4. Registrar spoke en el Software Catalog (Backstage)
 
 }
 
-def "main spoke delete" [
-    --name: string                  #Nombre del spoke
+def "main businessflow delete" [
+    --name: string                  #Nombre del flujo de negocio
 
 ] {
     #1. Eliminar infraestructura
@@ -58,9 +70,9 @@ def "main spoke delete" [
     #2. Eliminar registro del spoke en el Software Catalog (Backstage)
 }
 
-def "main micro new" [
-    --spoke-name:string             #Nombre del spoke
-    --micro-name:string             #Nombre del microservicio
+def "main businessflow new-micro" [
+    --businessflow-name:string              #Nombre del flujo de negocio
+    --micro-name:string                     #Nombre del microservicio
 ] {
     #1. Crear el repositorio
 

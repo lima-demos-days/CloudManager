@@ -69,3 +69,13 @@ def "main infra delete-spoke" [
     
     main infra setup    #Se eliminó el spoke de la lista, se ejecuta Terraform para reconciliar
 }
+
+def "main infra get-spokes" [] {
+    #1. Cambio de directorio
+    cd ../../infra/clusters
+
+    #2. Obtener información de los clusters
+    let clusters_list = (open clusters.auto.tfvars.json).clusters
+
+    return $clusters_list
+}
