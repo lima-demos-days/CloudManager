@@ -13,3 +13,7 @@ def "main github push manager" [
     #3. Retornar al CLI
     cd $current_directory
 }
+
+def "main github push spoke" [] {
+    
+}

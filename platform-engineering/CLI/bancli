@@ -64,7 +64,7 @@ def "main businessflow new" [
     #3. (Config) Credenciales de aws para generación de recursos con Crossplane
     main crossplane set-creds --businessflow-name=$name
 
-    #4. Definición el nuevo 'spoke' en CloudManager 
+    #4. Definición del nuevo 'spoke' en CloudManager 
     if (!$existing_infra) {
         main flux new-spoke
     }
