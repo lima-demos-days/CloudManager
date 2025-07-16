@@ -8,8 +8,11 @@ source aws/kubeconfig.nu
 source infra/spokes.nu
 source github/new_businessflow.nu
 source github/new_micro.nu
+source github/push.nu
 source backstage/crossplane-integration.nu
 source crossplane/creds.nu
+source flux/bootstrap.nu
+source flux/new_spoke.nu
 source utils.nu
 
 def main [] {}
@@ -40,6 +43,7 @@ def "main businessflow register" [
 
 def "main businessflow new" [
     --name: string                  #Nombre del flujo de negocio
+    --existing-infra = false
     --description:string = ""       #(Opcional) Descripción del flujo de negocio
     --min-size=1                    #Mínimo número de nodos
     --max-size=2                    #Máximo número de nodos
@@ -48,15 +52,31 @@ def "main businessflow new" [
     --cidr="172.0.0.0/16"           #CIDR de la VPC
 ] {
     #1. Creación del repo
-    main github new-businessflow --name=$name --description=$description
-
+    if (!$existing_infra) {
+        main github new-businessflow --name=$name --description=$description
+    }
+    
     #2. Levantar infraestructura (EKS)
-    main infra new-spoke --cluster-name=$"($name)-Cluster" --min-size=$min_size --max-size=$max_size --desired-size=$desired_size --instance-type=$instance_type --cidr=$cidr
-
+    if (!$existing_infra) {
+        main infra new-spoke --cluster-name=$"($name)-Cluster" --min-size=$min_size --max-size=$max_size --desired-size=$desired_size --instance-type=$instance_type --cidr=$cidr
+    }
+    
     #3. (Config) Credenciales de aws para generación de recursos con Crossplane
     main crossplane set-creds --businessflow-name=$name
+
+    #4. Definición el nuevo 'spoke' en CloudManager 
+    if (!$existing_infra) {
+        main flux new-spoke
+    }
+
+    #5. Bootstrap de FluxCD
+    main flux bootstrap --repository=$"($name)-Businessflow"
+
+    #6. Definir GitRepo del CloudManager, en el repo del spoke, y emparejar 
+    #   las definiciones de 'Platform-Engineering' + 'Security' del CloudManager
     
-    #4. Registrar spoke en el Software Catalog (Backstage)
+    
+    #7. Registrar spoke en el Software Catalog (Backstage)
 
 }
 
