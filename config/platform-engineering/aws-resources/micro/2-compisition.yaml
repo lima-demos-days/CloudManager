@@ -1,0 +1,116 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: micros-composition
+spec:
+  compositeTypeRef:
+    apiVersion: bancolombia.businessflows/v1
+    kind: Micro
+  mode: Pipeline
+  pipeline:
+  - step: create-deployment-and-service
+    functionRef:
+      name: crossplane-contrib-function-python
+    input:
+      apiVersion: python.fn.crossplane.io/v1beta1
+      kind: Script
+      script: |
+        def compose(req, rsp):
+            observed_xr = req.observed.composite.resource
+
+            rsp.desired.resources["deployment"].resource.update({
+                "apiVersion": "apps/v1",
+                "kind": "Deployment",
+                "metadata": {
+                  "labels": {"example.crossplane.io/app": observed_xr["metadata"]["name"]},
+                },
+                "spec": {
+                    "replicas": 2,
+                    "selector": {"matchLabels": {"example.crossplane.io/app": observed_xr["metadata"]["name"]}},
+                    "template": {
+                      "metadata": {
+                        "labels": {"example.crossplane.io/app": observed_xr["metadata"]["name"]},
+                      },
+                      "spec": {
+                        "containers": [{
+                          "name": "app",
+                          "image": observed_xr["spec"]["image"],
+                          "ports": [{"containerPort": 80}]
+                        }],
+                      },
+                    },
+                },
+            })
+
+            observed_deployment = req.observed.resources["deployment"].resource
+            if "status" in observed_deployment:
+              if "availableReplicas" in observed_deployment["status"]:
+                rsp.desired.composite.resource.get_or_create_struct("status")["replicas"] = observed_deployment["status"]["availableReplicas"]
+              if "conditions" in observed_deployment["status"]:
+                for condition in observed_deployment["status"]["conditions"]:
+                  if condition["type"] == "Available" and condition["status"] == "True":
+                    rsp.desired.resources["deployment"].ready = True
+
+            rsp.desired.resources["service"].resource.update({
+                "apiVersion": "v1",
+                "kind": "Service",
+                "metadata": {
+                  "labels": {"example.crossplane.io/app": observed_xr["metadata"]["name"]},
+                },
+                "spec": {
+                  "selector": {"example.crossplane.io/app": observed_xr["metadata"]["name"]},
+                  "ports": [{"protocol": "TCP", "port": 8080, "targetPort": 80}],
+                },
+            })
+
+            observed_service = req.observed.resources["service"].resource
+            if "spec" in observed_service and "clusterIP" in observed_service["spec"]:
+              rsp.desired.composite.resource.get_or_create_struct("status")["address"] = observed_service["spec"]["clusterIP"]
+              rsp.desired.resources["service"].ready = True
+            
+
+            rsp.desired.resources["db"].resource.update({
+              "apiVersion": "rds.aws.upbound.io/v1beta3",
+              "kind": "Instance",
+              "metadata": {
+                "annotations": {
+                  "meta.upbound.io/example-id": "rds/v1beta3/instance"
+                },
+                "labels": {
+                  "testing.upbound.io/example-name": "example-dbinstance"
+                },
+                "name": "example-dbinstance"
+              },
+              "spec": {
+                "providerConfigRef": {
+                  "name": "aws-config"
+                },
+                "forProvider": {
+                  "passwordSecretRef": {
+                    "name": "db-manager-password",
+                    "key": "pass",
+                    "namespace": "default"
+                  },
+                  "allocatedStorage": 20,
+                  "autoGeneratePassword": True,
+                  "autoMinorVersionUpgrade": True,
+                  "backupRetentionPeriod": 14,
+                  "backupWindow": "09:46-10:16",
+                  "dbName": "example",
+                  "engine": "postgres",
+                  "engineVersion": "16.6",
+                  "instanceClass": "db.t3.micro",
+                  "maintenanceWindow": "Mon:00:00-Mon:03:00",
+                  "publiclyAccessible": False,
+                  "region": "us-east-1",
+                  "skipFinalSnapshot": True,
+                  "storageEncrypted": True,
+                  "storageType": "gp2",
+                  "username": "adminuser"
+                },
+                "writeConnectionSecretToRef": {
+                  "name": "db-creds",
+                  "namespace": "manager-cluster"
+                }
+              }
+            })

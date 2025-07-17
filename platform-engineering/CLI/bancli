@@ -30,7 +30,7 @@ def "main manager setup" [
     main aws get-kubeconfig
 
     #3. Habilitar e instalar Flux
-    main flux bootstrap
+    main flux bootstrap --path="config/kubernetes/manager"
 
     #4. Habilitar crossplane-system ns
     kubectl create ns crossplane-system

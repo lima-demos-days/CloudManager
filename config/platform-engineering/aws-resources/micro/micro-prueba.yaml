@@ -1,0 +1,10 @@
+apiVersion: bancolombia.businessflows/v1
+kind: Micro
+metadata:
+  namespace: default
+  name: micro-prueba
+spec:
+  image: nginx
+  aws-resources:
+    region: us-east-1
+    db-name: example

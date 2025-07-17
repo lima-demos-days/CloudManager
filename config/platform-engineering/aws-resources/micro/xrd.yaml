@@ -1,0 +1,52 @@
+apiVersion: apiextensions.crossplane.io/v2alpha1
+kind: CompositeResourceDefinition
+metadata:
+  name: micros.bancolombia.businessflows
+spec:
+  scope: Namespaced
+  group: bancolombia.businessflows
+  names:
+    kind: Micro
+    plural: micros
+  versions:
+  - name: v1
+    served: true
+    referenceable: true
+    schema:
+     openAPIV3Schema:
+       type: object
+       properties:
+        spec:
+          type: object
+          properties:
+            image:
+              description: Imagen base del microservicio
+              type: string
+            replicas:
+              description: Numero de replicas.
+              type: number
+              default: 1
+            aws-resources:
+              description: Definición de recursos de AWS
+              type: object
+              properties:
+                db-name: 
+                  description: Nombre de la base de datos
+                  type: string
+                  default: "example"
+                region:
+                  description: Region en donde se despliegan los recursos
+                  type: string
+                  default: "us-east-1" 
+          required:
+          - image
+        status:
+          type: object
+          properties:
+            replicas:
+              description: The number of available app replicas.
+              type: integer
+            address:
+              description: The app's IP address.
+              type: string
+
