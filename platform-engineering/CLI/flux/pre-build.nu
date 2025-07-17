@@ -28,9 +28,17 @@ def "main flux pre-build" [
     #3. Establecer conexión con el hub-cluster y crear el namespace del spoke-cluster
     main aws get-kubeconfig --cluster-name=$hub_cluster --generate-yaml=false
 
+    #3.1. Verificar si el ns existe
     let ns_name = $spoke_cluster | str downcase
-    kubectl create ns $ns_name
-
-    #4. Registrar el spoke-kubeconfig como secreto en el ns del spoke-cluster
-    kubectl create secret generic -n $ns_name cluster-kubeconfig --from-file=value=spoke-kubeconfig.yaml
+    let ns = kubectl get ns | detect columns | get NAME | where ($it == $ns_name)
+    if ($ns | is-empty) {
+        kubectl create ns $ns_name
+        #4. Registrar el spoke-kubeconfig como secreto en el ns del spoke-cluster
+        kubectl create secret generic -n $ns_name cluster-kubeconfig --from-file=value=spoke-kubeconfig.yaml
+    } else {
+        let secret = kubectl get secret -n $ns_name | detect columns
+        if ($secret | is-empty) {   #Si no existe, créelo
+            kubectl create secret generic -n $ns_name cluster-kubeconfig --from-file=value=spoke-kubeconfig.yaml
+        }
+    }
 }
