@@ -6,6 +6,7 @@ def "main github push manager" [
     cd ../../
 
     #2. Realizar push
+    git pull
     git add .
     git commit -m $"config: nuevo spoke - ($spoke_name)"
     git push

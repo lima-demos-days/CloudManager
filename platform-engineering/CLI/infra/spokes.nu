@@ -34,6 +34,7 @@ def "main infra new-spoke" [
     }
 
     #2. Cambiar al directorio de la configuración Terraform
+    let current_directory = pwd
     cd ../../infra/clusters
 
     #3. Añadir a la lista de clústers
@@ -50,6 +51,10 @@ def "main infra new-spoke" [
     if $dry_run == "client" {
         $original | save clusters.auto.tfvars.json --force
     }
+
+    #6. Retornar al directorio de origen 
+    #terraform state rm $"kubernetes_namespace.business_ns[\"($cluster_name)\"]"
+    cd $current_directory
 }
 
 def "main infra delete-spoke" [

@@ -11,6 +11,7 @@ source github/new_micro.nu
 source github/push.nu
 source backstage/crossplane-integration.nu
 source crossplane/creds.nu
+source flux/pre-build.nu
 source flux/bootstrap.nu
 source flux/new_spoke.nu
 source utils.nu
@@ -28,10 +29,16 @@ def "main manager setup" [
     #2. Configura el kubeconfig del 'Manager-Cluster'
     main aws get-kubeconfig
 
-    #3. Configura el sa del cluster para integrarlo con backstage
+    #3. Habilitar e instalar Flux
+    main flux bootstrap
+
+    #4. Habilitar crossplane-system ns
+    kubectl create ns crossplane-system
+
+    #5. Configura el sa del cluster para integrarlo con backstage
     main get cluster data --create_service_account=true
 
-    #4. 
+    #6. 
 }
 
 #Registro de flujos de negocio ya existentes
@@ -52,29 +59,30 @@ def "main businessflow new" [
     --cidr="172.0.0.0/16"           #CIDR de la VPC
 ] {
     #1. Creación del repo
-    if (!$existing_infra) {
+    if (not $existing_infra) {
         main github new-businessflow --name=$name --description=$description
     }
     
     #2. Levantar infraestructura (EKS)
-    if (!$existing_infra) {
+    if (not $existing_infra) {
         main infra new-spoke --cluster-name=$"($name)-Cluster" --min-size=$min_size --max-size=$max_size --desired-size=$desired_size --instance-type=$instance_type --cidr=$cidr
     }
-    
-    #3. (Config) Credenciales de aws para generación de recursos con Crossplane
+
+    #3. (Config) Generar credenciales (cluster-kubeconfig) como secreto en el 
+    #   'Manager-Cluster' para ejecutar definiciones desde el 'hub' hacia el spoke
+    main flux pre-build --spoke-cluster=$"($name)-Cluster"
+
+    #4. (Config) Credenciales de aws para generación de recursos con Crossplane
     main crossplane set-creds --businessflow-name=$name
 
-    #4. Definición del nuevo 'spoke' en CloudManager 
-    if (!$existing_infra) {
-        main flux new-spoke
+    #5. Definición del nuevo 'spoke' en CloudManager => FALTA RESTRUCTURAR LA PLANTILLA (error de Kustomization -> necesita un kutomization.yaml para funcionar en platform-engineering y kubernetes folders)
+    if (not $existing_infra) {
+        let spoke_name = $name | str downcase
+        main flux new-spoke --spoke-name=$spoke_name --spoke-ns=$"($spoke_name)-cluster" --git-url=$"https://github.com/jdarguello/($name)-Businessflow" --git-ref="refs/head/main" --git-branch="main" --flux-path="infra/gitops"
     }
 
-    #5. Bootstrap de FluxCD
-    main flux bootstrap --repository=$"($name)-Businessflow"
-
-    #6. Definir GitRepo del CloudManager, en el repo del spoke, y emparejar 
-    #   las definiciones de 'Platform-Engineering' + 'Security' del CloudManager
-    
+    #6. Bootstrap de FluxCD
+    main flux bootstrap --repository=$"($name)-Businessflow" --cluster-name=$"($name)-Cluster"
     
     #7. Registrar spoke en el Software Catalog (Backstage)
 

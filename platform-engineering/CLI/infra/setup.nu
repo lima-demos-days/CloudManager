@@ -30,7 +30,12 @@ def --env "main infra setup" [
     if $dry_run == "server" {
         terraform apply --var=github_token=$env.GITHUB_TOKEN -auto-approve
     }
-    #4. Regresa al directorio base del CLI
+
+    #4. Limpieza
+    #terraform state rm kubernetes_namespace.flux_system
+    #terraform state rm kubernetes_namespace.crossplane_system
+
+    #5. Regresa al directorio base del CLI
     cd $current_directory
 }
 
