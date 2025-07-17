@@ -8,9 +8,9 @@ def --env "main crossplane set-creds" [
 
     #2. Guardar las credenciales de conexión en un archivo
     let aws_creds = $"[default]\naws_access_key_id = ($env.AWS_ACCESS_KEY_ID)\naws_secret_access_key = ($env.AWS_SECRET_ACCESS_KEY)"
-    open aws-creds.txt
-        | $aws_creds
+    $aws_creds | save aws-creds.txt --force
     
     #3. Generar el secreto en el cluster
-    kubectl create secret generic -n crossplane_system aws-creds --from-file=creds=aws-creds.txt
+    kubectl create ns crossplane-system
+    kubectl create secret generic -n crossplane-system aws-creds --from-file=creds=aws-creds.txt
 }

@@ -75,7 +75,7 @@ def "main businessflow new" [
     #4. (Config) Credenciales de aws para generación de recursos con Crossplane
     main crossplane set-creds --businessflow-name=$name
 
-    #5. Definición del nuevo 'spoke' en CloudManager => FALTA RESTRUCTURAR LA PLANTILLA (error de Kustomization -> necesita un kutomization.yaml para funcionar en platform-engineering y kubernetes folders)
+    #5. Definición del nuevo 'spoke' en CloudManager
     if (not $existing_infra) {
         let spoke_name = $name | str downcase
         main flux new-spoke --spoke-name=$spoke_name --spoke-ns=$"($spoke_name)-cluster" --git-url=$"https://github.com/jdarguello/($name)-Businessflow" --git-ref="refs/head/main" --git-branch="main" --flux-path="infra/gitops"
