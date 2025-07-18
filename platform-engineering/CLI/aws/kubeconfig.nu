@@ -1,3 +1,5 @@
+source cluster-ref.nu
+
 def "main aws get-kubeconfig" [
     --cluster-name:string = "Manager-Cluster"
     --region:string = "us-east-1"
@@ -5,7 +7,7 @@ def "main aws get-kubeconfig" [
     --kube-out:string = "kubeconfig-dot.yaml"
 ] {
     #1. Actualizar kubeconfig
-    aws eks update-kubeconfig --region $region --name $cluster_name
+    main aws set-cluster --region $region --cluster-name $cluster_name
 
     #2. Guardarlo como archivo
     if ($generate_yaml) {

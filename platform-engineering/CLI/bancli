@@ -32,10 +32,7 @@ def "main manager setup" [
     #3. Habilitar e instalar Flux
     main flux bootstrap --path="config/kubernetes/manager"
 
-    #4. Habilitar crossplane-system ns
-    kubectl create ns crossplane-system
-
-    #5. Configura el sa del cluster para integrarlo con backstage
+    #4. Configura el sa del cluster para integrarlo con backstage
     main get cluster data --create_service_account=true
 
     #6. 
