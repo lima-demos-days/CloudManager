@@ -6,10 +6,7 @@ def "main github push manager" [
     cd ../../
 
     #2. Realizar push
-    git pull
-    git add .
-    git commit -m $"config: nuevo spoke - ($spoke_name)"
-    git push
+    main git push --commit-msg=$"config: nuevo spoke - ($spoke_name)"
 
     #3. Retornar al CLI
     cd $current_directory
@@ -17,4 +14,14 @@ def "main github push manager" [
 
 def "main github push spoke" [] {
     
+}
+
+#Ejecuta git-push dentro del repo
+def "main git push" [
+    --commit-msg:string
+] {
+    git pull
+    git add .
+    git commit -m $commit_msg
+    git push
 }

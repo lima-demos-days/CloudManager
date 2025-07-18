@@ -14,6 +14,8 @@ source crossplane/creds.nu
 source flux/pre-build.nu
 source flux/bootstrap.nu
 source flux/new_spoke.nu
+source ops/new_micro.nu
+source ops/new_service.nu
 source utils.nu
 
 def main [] {}
@@ -95,12 +97,25 @@ def "main businessflow delete" [
     #2. Eliminar registro del spoke en el Software Catalog (Backstage)
 }
 
-def "main businessflow new-micro" [
+#Crea un nuevo microservicio y lo vincula al businessflow
+def "main businessflow micro new" [
     --businessflow-name:string              #Nombre del flujo de negocio
     --micro-name:string                     #Nombre del microservicio
 ] {
     #1. Crear el repositorio
+    main github new-micro --name $micro_name
+
+    #2. Adecuación del businessflow repo para añadir el micro
+    main ops new-micro --businessflow-name=$businessflow_name --micro-name=$micro_name
 
     #2. Registrar el micro con el System (Backstage)
+
+}
+
+def "main businessflow micro service new" [
+    --businessflow-name:string              #Nombre del flujo de negocio
+    --micro-name:string                     #Nombre del microservicio
+    --service-type:string                   #Especifica el tipo de servicio a vincular al micro
+] {
 
 }
