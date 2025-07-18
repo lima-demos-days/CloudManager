@@ -2,3 +2,4 @@
 kubeconfig-dot.yaml
 aws-creds.txt
 spoke-kubeconfig.yaml
+tmp/

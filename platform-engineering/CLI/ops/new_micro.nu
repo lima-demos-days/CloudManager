@@ -43,7 +43,7 @@ def "main ops new-micro" [
     cd $repo_name
     main git push --commit-msg=$"platform: nuevo micro - ($micro_name)"
 
-    #5. Borrar repo
+    #5. Borrar repo tmp
     cd $current_directory
     rm -r tmp
 }

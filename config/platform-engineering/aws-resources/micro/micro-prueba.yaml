@@ -5,6 +5,7 @@ metadata:
   name: micro-prueba
 spec:
   image: nginx
+  replicas: 1
   aws-resources:
     region: us-east-1
     db-name: example

@@ -16,6 +16,7 @@ source flux/bootstrap.nu
 source flux/new_spoke.nu
 source ops/new_micro.nu
 source ops/new_service.nu
+source ops/back-db.nu
 source utils.nu
 
 def main [] {}
@@ -108,14 +109,40 @@ def "main businessflow micro new" [
     #2. Adecuación del businessflow repo para añadir el micro
     main ops new-micro --businessflow-name=$businessflow_name --micro-name=$micro_name
 
-    #2. Registrar el micro con el System (Backstage)
+    #3. Registrar el micro con el System (Backstage)
 
 }
 
-def "main businessflow micro service new" [
+#Solicitud de nuevo microservicio backend con base de datos
+def "main service back-db new" [
     --businessflow-name:string              #Nombre del flujo de negocio
     --micro-name:string                     #Nombre del microservicio
-    --service-type:string                   #Especifica el tipo de servicio a vincular al micro
+    --image:string
+    --back-name:string = ""                 #Nombre del backend
+    --replicas:number = 1
+    --new-micro-repo = true                           #¿Nuevo microservicio?
+] {
+    #1. Si es un nuevo microservicio, creelo y vinculelo
+    if ($new_micro_repo) {
+        main businessflow micro new --businessflow-name=$businessflow_name --micro-name=$micro_name
+    }
+
+    #2. El backend debe tener nombre
+    mut backdb_name = $back_name
+    if ($back_name | str length) == 0 {
+        $backdb_name = $"($micro_name)-backdb"
+    }
+
+    #3. Levantar manifiestos de crossplane en el micro
+    main ops back-db new --image=$image --replicas=$replicas --backend-name=$backdb_name --micro-name=$micro_name --businessflow-name=$businessflow_name 
+}
+
+#Actualización de microservicio creado con base de datos
+def "main service back-db update" [
+    --businessflow-name:string              #Nombre del flujo de negocio
+    --micro-name:string                     #Nombre del microservicio
+    --db-type:string                        #Especifica el tipo de base de datos
 ] {
 
 }
+
