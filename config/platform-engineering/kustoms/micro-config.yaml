@@ -4,7 +4,6 @@ metadata:
   name: micro-config
   namespace: ${SPOKE_NS}
 spec:
-  targetNamespace: ${SPOKE_NS}
   interval: 1h
   retryInterval: 3m
   timeout: 5m
