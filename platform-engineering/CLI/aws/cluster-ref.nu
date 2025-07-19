@@ -8,7 +8,15 @@ def "main aws set-cluster" [
     #2. Obtener el kubeconfig generado
     mut kubeconfig = open ~/.kube/config | from yaml
 
-    #3. Introducir el token en la sección de users
+    #3. Obtener el nombre del 'usuario' (cluster-arn)
+    mut cluster_arn = ""
+    for $cluster in $kubeconfig.clusters {
+        if ($cluster.name | str contains $cluster_name) {
+            $cluster_arn = $cluster.name
+        }
+    }
+
+    #4. Introducir el token en la sección de users
     for $user in ($kubeconfig.users | enumerate) {
         if ($user.item.name | str contains $cluster_name) {
             #3.1 Genear token
@@ -16,7 +24,7 @@ def "main aws set-cluster" [
 
             #3.2 Vincularlo al user
             let user_info = {
-                name: $cluster_name
+                name: $cluster_arn
                 user: {
                     token: $token.status.token
                 }
@@ -29,6 +37,6 @@ def "main aws set-cluster" [
         }
     }
 
-    #4. Guardar kubeconfig en ruta oficial
+    #5. Guardar kubeconfig en ruta oficial
     $kubeconfig | to yaml | save ~/.kube/config --force
 }
