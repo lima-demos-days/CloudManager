@@ -26,17 +26,18 @@ spec:
               # 2) generate the new token
               NEW_TOKEN=$(kubectl --kubeconfig=/tmp/kubeconfig.yaml create token flux-admin -n admin)
 
-              echo "TOKEN"
-              echo $NEW_TOKEN
+              # 3) Remove any existing token lines
+              grep -v '^[[:space:]]*token:' /tmp/kubeconfig.yaml > /tmp/kc_notok.yaml
 
-              # 3) escape sed metacharacters in the token
-              SAFE_TOKEN=$(printf '%s' "$NEW_TOKEN" | sed -e 's/[\/&|]/\\&/g')
-
-              # 4) replace the token line in place using '|' as the delimiter
-              sed -i "s|^\(\s*token:[[:space:]]*\).*|\1${SAFE_TOKEN}|" /tmp/kubeconfig.yaml
-
-              echo "kubeconfig"
-              cat /tmp/kubeconfig.yaml
+              # 4) Inject the new token after the `user:` line
+              awk -v tok="$NEW_TOKEN" '
+                /^[[:space:]]*user:[[:space:]]*$/ {
+                  print                           # the "  user:" line
+                  print "    token: " tok         # indent 4 spaces, then token
+                  next
+                }
+                { print }
+              ' /tmp/kc_notok.yaml > /tmp/kubeconfig.yaml
 
               # 5) re‑apply the file back into the Secret
               kubectl create secret generic cluster-kubeconfig -n ${SPOKE_NS} \
