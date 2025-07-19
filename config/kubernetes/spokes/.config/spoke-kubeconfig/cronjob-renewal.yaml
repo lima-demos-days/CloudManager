@@ -19,27 +19,23 @@ spec:
             - /bin/bash
             - -c
             - |
-              set -euxo pipefail
+              # 1) dump the secret into a file
+              kubectl get secret cluster-kubeconfig -n ${SPOKE_NS} \
+                -o jsonpath='{.data.value}' | base64 -d > /tmp/kubeconfig.yaml
 
-              # 1) open the remote kubeconfig via process-substitution
-              REMOTE_KUBECONFIG=<( \
-                kubectl get secret cluster-kubeconfig -n ${SPOKE_NS} \
-                  -o jsonpath='{.data.value}' | base64 -d \
-              )
-
-              # 2) generate a new token against that remote cluster
-              NEW_TOKEN=$(kubectl --kubeconfig="$REMOTE_KUBECONFIG" \
+              # 2) get your new token
+              NEW_TOKEN=$(kubectl --kubeconfig=/tmp/kubeconfig.yaml \
                 create token flux-admin -n admin)
 
-              # 3) patch the kubeconfig in the Secret so its next user has the fresh token
-              kubectl get secret cluster-kubeconfig -n ${SPOKE_NS} \
-                -o jsonpath='{.data.value}' | base64 -d \
-              | jq --arg tok "$NEW_TOKEN" '
-                  .users[0].user.token = $tok
-                | .users[0].name = "flux-admin"
-                | .contexts[0].context.user = "flux-admin"
-              ' \
-              | kubectl create secret generic cluster-kubeconfig -n ${SPOKE_NS} \
-                  --from-file=value=/dev/stdin \
-                  --dry-run=client -o yaml \
+              # 3) replace the “token: …” line in place
+              sed -i \
+                "s#^\(\s*token:\s*\).*#\1${NEW_TOKEN}#" \
+                /tmp/kubeconfig.yaml
+
+              # 4) re‑apply the file back into the Secret
+              kubectl create secret generic cluster-kubeconfig -n ${SPOKE_NS} \
+                --from-file=value=/tmp/kubeconfig.yaml \
+                --dry-run=client -o yaml \
               | kubectl apply -f -
+
+
