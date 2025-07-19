@@ -19,5 +19,5 @@ spec:
     substitute:
       SPOKE_NS: cuentas-cluster
       GIT_URL: https://github.com/jdarguello/Cuentas-Businessflow
-      GIT_REF: refs/head/main
+      GIT_REF: main
       FLUX_PATH: infra/gitops
