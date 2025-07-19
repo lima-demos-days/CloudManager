@@ -3,7 +3,6 @@ kind: Kustomization
 metadata:
   name: aws-config
   namespace: ${SPOKE_NS}
-  #namespace: cron-test
 spec:
   interval: 1h
   retryInterval: 3m

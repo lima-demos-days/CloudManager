@@ -19,5 +19,5 @@ spec:
     substitute:
       SPOKE_NS: inversiones-cluster
       GIT_URL: "https://github.com/jdarguello/CDT_Businessflow"
-      GIT_REF: "refs/heads/main"
+      GIT_REF: "main"
       FLUX_PATH: "infra/gitops"
