@@ -26,11 +26,17 @@ spec:
               # 2) get your new token
               NEW_TOKEN=$(kubectl --kubeconfig=/tmp/kubeconfig.yaml \
                 create token flux-admin -n admin)
+              
+              echo "TOKEN?"
+              echo $NEW_TOKEN
 
               # 3) replace the “token: …” line in place
               sed -i \
                 "s#^\(\s*token:\s*\).*#\1${NEW_TOKEN}#" \
                 /tmp/kubeconfig.yaml
+
+              echo "kubeconfig"
+              cat /tmp/kubeconfig.yaml
 
               # 4) re‑apply the file back into the Secret
               kubectl create secret generic cluster-kubeconfig -n ${SPOKE_NS} \
