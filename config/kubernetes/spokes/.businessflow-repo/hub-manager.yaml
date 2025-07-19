@@ -17,9 +17,6 @@ spec:
   postBuild:
     substitute:
       SPOKE_NS: ${SPOKE_NS}
-  kubeConfig:
-    secretRef:
-      name: cluster-kubeconfig
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
