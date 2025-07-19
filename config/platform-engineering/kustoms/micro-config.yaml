@@ -2,8 +2,8 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: micro-config
-  #namespace: ${SPOKE_NS}
-  namespace: cron-test
+  namespace: ${SPOKE_NS}
+  #namespace: cron-test
 spec:
   interval: 1h
   retryInterval: 3m
@@ -15,6 +15,6 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  #kubeConfig:
-  #  secretRef:
-  #    name: cluster-kubeconfig
+  kubeConfig:
+    secretRef:
+      name: cluster-kubeconfig
