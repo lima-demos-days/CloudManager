@@ -4,7 +4,6 @@ metadata:
   name: spoke-management
   namespace: inversiones-cluster
 spec:
-  targetNamespace: inversiones-cluster
   interval: 1h
   retryInterval: 3m
   timeout: 5m
