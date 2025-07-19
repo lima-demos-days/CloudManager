@@ -27,4 +27,10 @@ def "main aws clean-kubeconfig" [] {
     for $cluster in $clusters {
         kubectl config delete-cluster $cluster.NAME
     }
+
+    #3. Obtener y eliminar todos los usuarios
+    let users = kubectl config get-users | detect columns
+    for $user in $users {
+        kubectl config delete-user $user.NAME
+    }
 }
