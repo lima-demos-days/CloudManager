@@ -41,8 +41,4 @@ def "main flux pre-build" [
             kubectl create secret generic -n $ns_name cluster-kubeconfig --from-file=value=spoke-kubeconfig.yaml
         }
     }
-
-    #4. Imprima el secreto desde el cluster
-    let contenido = kubectl get secret cluster-kubeconfig -n $ns_name -o jsonpath='{.data.value}' | base64 -d
-    print $contenido
 }
