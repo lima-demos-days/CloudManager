@@ -14,6 +14,9 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
+  postBuild:
+    substitute:
+      SPOKE_NS: ${SPOKE_NS}
   kubeConfig:
     secretRef:
       name: cluster-kubeconfig
