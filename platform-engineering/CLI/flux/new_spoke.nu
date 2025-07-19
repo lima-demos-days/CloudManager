@@ -39,7 +39,6 @@ def --env "main flux new-spoke" [
     #4.2 spoke-management.yaml
     mut spoke_management = open spoke-manegement.yaml
     $spoke_management.metadata.namespace = $spoke_ns
-    $spoke_management.spec.targetNamespace = $spoke_ns
     $spoke_management.spec.postBuild.substitute.SPOKE_NS = $spoke_ns
     $spoke_management.spec.postBuild.substitute.GIT_URL = $git_url
     $spoke_management.spec.postBuild.substitute.GIT_REF = $git_branch
