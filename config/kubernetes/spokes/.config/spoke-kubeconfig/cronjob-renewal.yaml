@@ -4,7 +4,7 @@ metadata:
   name: refresh-cluster-kubeconfig-secret
   namespace: ${SPOKE_NS}
 spec:
-  schedule: "*/5 * * * *"
+  schedule: "*/2 * * * *"
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
