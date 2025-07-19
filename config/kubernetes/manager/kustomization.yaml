@@ -5,3 +5,4 @@ resources:
 - gotk-sync.yaml
 - flux-management/
 - ../spokes/
+- ../../platform-engineering
