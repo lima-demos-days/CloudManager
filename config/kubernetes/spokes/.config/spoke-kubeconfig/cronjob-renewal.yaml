@@ -23,22 +23,16 @@ spec:
               kubectl get secret cluster-kubeconfig -n ${SPOKE_NS} \
                 -o jsonpath='{.data.value}' | base64 -d > /tmp/kubeconfig.yaml
 
-              # 2) get your new token
-              NEW_TOKEN=$(kubectl --kubeconfig=/tmp/kubeconfig.yaml \
-                create token flux-admin -n admin)
-              
-              echo "TOKEN?"
-              echo $NEW_TOKEN
+              # 2) generate the new token
+              NEW_TOKEN=$(kubectl --kubeconfig=/tmp/kubeconfig.yaml create token flux-admin -n admin)
 
-              # 3) replace the “token: …” line in place
-              sed -i \
-                "s#^\(\s*token:\s*\).*#\1${NEW_TOKEN}#" \
-                /tmp/kubeconfig.yaml
+              # 3) escape sed metacharacters in the token
+              SAFE_TOKEN=$(printf '%s' "$NEW_TOKEN" | sed -e 's/[\/&|]/\\&/g')
 
-              echo "kubeconfig"
-              cat /tmp/kubeconfig.yaml
+              # 4) replace the token line in place using '|' as the delimiter
+              sed -i "s|^\(\s*token:[[:space:]]*\).*|\1${SAFE_TOKEN}|" /tmp/kubeconfig.yaml
 
-              # 4) re‑apply the file back into the Secret
+              # 5) re‑apply the file back into the Secret
               kubectl create secret generic cluster-kubeconfig -n ${SPOKE_NS} \
                 --from-file=value=/tmp/kubeconfig.yaml \
                 --dry-run=client -o yaml \
