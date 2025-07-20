@@ -18,7 +18,7 @@
         "export PATH=$PATH:$PWD"
       ],
       "scripts": {
-        "manager-setup": ["bancli manager setup"]
+        "manager-setup": ["./bancli manager setup"]
       }
     }
   }
