@@ -28,6 +28,7 @@ def --env "main infra setup" [
     }
     #3. Ejecutar terraform (($dry_run == "server"))
     if $dry_run == "server" {
+        terraform init
         terraform apply --var=github_token=$env.GITHUB_TOKEN -auto-approve
     }
 
