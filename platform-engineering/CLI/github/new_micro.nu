@@ -9,5 +9,5 @@ def "main github new-micro" [
     github auth
 
     #2. Creación del repo
-    github newrepo --name=$"($name)-Micro" --template=$template --description=$description
+    github newrepo --name=$"($name)-micro" --template=$template --description=$description
 }   

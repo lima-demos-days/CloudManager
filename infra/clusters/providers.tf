@@ -6,6 +6,13 @@ terraform {
       version = "~>5.95"
     }
   }
+
+  backend "s3" {
+    bucket         = "tf-bancolombia-tech"       
+    key            = "prod/gitops.tfstate" 
+    region         = "us-east-1"             
+    dynamodb_table = "terraform-locks" 
+  }
 }
 
 provider "aws" {
