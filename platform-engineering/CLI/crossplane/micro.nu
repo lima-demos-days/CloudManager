@@ -19,7 +19,7 @@ def "crossplane microdb" [
             "replicas": $replicas,
             "aws-resources": {
                 "region": $region,
-                "db-name": $db_name
+                "db-name": ($db_name | str replace -r "-" "")
             }
         }
     }
