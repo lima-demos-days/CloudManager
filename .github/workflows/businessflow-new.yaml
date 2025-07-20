@@ -1,31 +1,45 @@
-name: businessflow-new
-description: Creación y adecuación para un nuevo flujo de negocio 
+name: new-businessflow
+description: Define y configura un nuevo flujo de negocio (levanta infra, repos, etc)
 
 on:
-  push:
-    branches: [ master ]
+  workflow_dispatch:
+    inputs:
+      businessflow-name:
+        required: true
+        description: Nombre del flujo de negocio
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Check out your repository
       - name: Checkout code
-        uses: actions/checkout@v3
-
-      # 2. Set up Python (adjust version as needed)
-      - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/checkout@v4
         with:
-          python-version: '3.x'
+          submodules: 'true'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
-      # 3. Install dependencies
-      - name: Install dependencies
+      - name: Create .env file
+        working-directory: platform-engineering/CLI
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      # 4. Run your test suite
-      - name: Run tests
-        run: pytest
+          echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" > .env
+          echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" >> .env
+          echo "GITHUB_TOKEN=$GITHUB_TOKEN" >> .env
+      
+      - name: Install and init Devbox
+        uses: jetpack-io/devbox-install-action@v0.13.0
+        with:
+          enable-cache: 'true'
+          refresh-cli:  'true'
+          devbox-version: 0.15.0
+          project-path: 'platform-engineering/CLI'
+      
+      - name: Define new businessflow
+        working-directory: platform-engineering/CLI
+        run: |
+          devbox run bancli businessflow new --name=${{ github.event.inputs.name }}
