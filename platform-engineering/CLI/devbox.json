@@ -20,7 +20,7 @@
       "nu"
     ],
     "scripts": {
-      "manager setup": ["bancli manager setup"]
+      "manager-setup": ["bancli manager setup"]
     }
   }
 }
