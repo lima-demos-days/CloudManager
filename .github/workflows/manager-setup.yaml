@@ -2,8 +2,7 @@ name: manager-setup
 description: Levanta el Manager-Cluster y establece configuraciones base en este
 
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -12,6 +11,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Create .env file
         working-directory: platform-engineering/CLI
