@@ -21,8 +21,8 @@ jobs:
       
       - name: Install and init Devbox
         uses: jetpack-io/devbox-install-action@v0.13.0
-        working-directory: platform-engineering/CLI
         with:
           enable-cache: 'true'
+          project-path: platform-engineering/CLI
       
       
