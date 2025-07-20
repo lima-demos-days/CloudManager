@@ -110,7 +110,7 @@ spec:
                 },
                 "writeConnectionSecretToRef": {
                   "name": "db-creds",
-                  "namespace": "manager-cluster"
+                  "namespace": observed_xr["metadata"]["namespace"]
                 }
               }
             })
