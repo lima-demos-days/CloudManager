@@ -20,9 +20,7 @@
       "nu"
     ],
     "scripts": {
-      "test": [
-        "echo \"Error: no test specified\" && exit 1"
-      ]
+      "manager setup": ["bancli manager setup"]
     }
   }
 }

@@ -1,0 +1,25 @@
+name: manager-setup
+description: Levanta el Manager-Cluster y establece configuraciones base en este
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Install Devbox
+        uses: jetpack-io/devbox-install-action@v0.13.0
+        with:
+          enable-cache: 'true'
+      
+      - name: Define .env variables in CLI
+        working-directory: platform-engineering/CLI
+        run: |
+          echo ${{ secrets.AWS_ACCESS_KEY_ID }} > .env
+          ls
