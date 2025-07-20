@@ -1,0 +1,24 @@
+{
+    "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.14.2/.schema/devbox.schema.json",
+    "packages": [
+      "nushell@0.105.1",
+      "terraform@1.5.7",
+      "kubectl@1.30.1",
+      "awscli2@2.27.49",
+      "crossplane-cli@latest",
+      "fluxcd@latest",
+      "git@latest",
+      "github-cli@2.23.0",
+      "curl@8.14.1",
+      "jq@1.8.0"
+    ],
+    "env_from": ".env", 
+    "shell": {
+      "init_hook": [
+        "export PATH=$PATH:$PWD"
+      ],
+      "scripts": {
+        "manager-setup": ["bancli manager setup"]
+      }
+    }
+  }

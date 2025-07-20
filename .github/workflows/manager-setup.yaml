@@ -29,7 +29,6 @@ jobs:
         with:
           enable-cache: 'true'
           refresh-cli:  'true'
-          project-path: platform-engineering/CLI
           devbox-version: 0.15.0
       
       
