@@ -29,6 +29,6 @@ jobs:
         with:
           enable-cache: 'true'
           project-path: platform-engineering/CLI
-          devbox-version: 0.15.0
+          devbox-version: 0.15.1
       
       
