@@ -28,7 +28,8 @@ jobs:
         uses: jetpack-io/devbox-install-action@v0.13.0
         with:
           enable-cache: 'true'
+          refresh-cli:  'true'
           project-path: platform-engineering/CLI
-          devbox-version: 0.15.1
+          devbox-version: 0.15.0
       
       
