@@ -30,4 +30,9 @@ jobs:
           refresh-cli:  'true'
           devbox-version: 0.15.0
       
+      - name: Setup Manager infraestructure
+        working-directory: platform-engineering/CLI
+        run: |
+          devbox run manager-setup
+      
       
