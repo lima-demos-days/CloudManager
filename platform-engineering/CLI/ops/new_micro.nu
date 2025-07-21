@@ -3,10 +3,10 @@ source ../github/push.nu
 source ../kubernetes/ns.nu
 source ../kubernetes/kustomization.nu
 
-def "main ops new-micro" [
+def --env "main ops new-micro" [
     --businessflow-name:string                              #Nombre del flujo de negocio
     --micro-name:string                                     #Nombre del microservicio
-    --host:string = "https://github.com/jdarguello/"        #Dirección base de repositorios
+    --host:string = "github.com"                   #Dirección base de repositorios
     --path:string="infra/platform-engineering/components"    #Path base de GitOps
 ] {
     #0. Adecuar carpetas
@@ -16,7 +16,7 @@ def "main ops new-micro" [
 
     #1. Clonar el businessflow repo y entrar a él
     let repo_name = $"($businessflow_name)-Businessflow"
-    let repo_url = $host + $repo_name
+    let repo_url = $"https://($env.GITHUB_USER):($env.GITHUB_TOKEN)@($host)/jdarguello/($repo_name)"
     git clone $repo_url
     cd $repo_name
     cd $path
