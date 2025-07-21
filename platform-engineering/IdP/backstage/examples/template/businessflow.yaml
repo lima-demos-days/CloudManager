@@ -1,0 +1,81 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: businessflow
+  title: Flujo de negocio
+  description: Creación de un nuevo flujo de negocio
+spec:
+  owner: jdarguello/businessflow
+  type: service
+  parameters:
+    - title: Metadata
+      properties:
+        name:
+          title: Flujo de negocio
+          type: string
+          ui:autofocus: true
+        description:
+          title: Descripción del flujo
+          type: string
+          ui:autofocus: true
+      required:
+        - name
+    - title: Infraestructura
+      properties:
+        provider:
+          title: Cloud Provider
+          type: string
+          enum:
+            - aws
+            - azure
+            - google
+          default: aws
+        instance-type:
+          type: string
+          default: "m6i.large"
+        cidr:
+          type: string
+          default: "172.0.0.0/16"
+        min-size:
+          type: integer
+          default: 1
+        max-size:
+          type: integer
+          default: 2
+        desired-size:
+          type: integer
+          default: 1
+      required:
+        - provider
+        - instance-type
+        - cidr
+        - min-size
+        - max-size
+        - desired-size
+  steps:
+    - id: log-message
+      name: Log Message
+      action: debug:log
+      input:
+        message: "Proceso de creación del flujo de negocio: ${{ parameters.name }}"
+    - id: dispatch
+      name: Dispatch Businessflow workflow
+      action: github:actions:dispatch
+      input:
+        repoUrl:        'https://github.com/jdarguello/CloudManager'
+        workflowId:     'businessflow.yml'
+        branchOrTagName: 'main'
+        workflowInputs:
+          name:          '${{ parameters.name }}'
+          description:   '${{ parameters.description }}'
+          provider:      '${{ parameters.provider }}'
+          instance_type: '${{ parameters.instance-type }}'
+          cidr:          '${{ parameters.cidr }}'
+          min_size:      '${{ parameters.min-size }}'
+          max_size:      '${{ parameters.max-size }}'
+          desired_size:  '${{ parameters.desired-size }}'
+  output:
+    links:
+      - title: 'Ver ejecución en GitHub'
+        url: ${{ steps.dispatch-businessflow.output.workflowRunUrl }}
+        icon: 'github'

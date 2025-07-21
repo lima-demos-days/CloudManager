@@ -4,9 +4,23 @@ description: Define y configura un nuevo flujo de negocio (levanta infra, repos,
 on:
   workflow_dispatch:
     inputs:
-      businessflow-name:
+      name:
         required: true
         description: Nombre del flujo de negocio
+      description:
+        description: Descripción del flujo
+      instance_type: 
+        required: true
+        description: Tipo de instancia cloud (nodos)
+      cidr:
+        required: true
+        description: Rango de conexiones de red
+      min_size: 
+        description: Tamaño mínimo de nodos
+      max_size:
+        description: Tamaño máximo de nodos
+      desired_size: 
+        description: Tamaño deseado
 
 jobs:
   build:
