@@ -57,10 +57,10 @@ jobs:
       - name: Define new businessflow
         working-directory: platform-engineering/CLI
         run: |
-          devbox run bancli service back-db new
-            --businessflow-name=${{ github.event.inputs.businessflow_name }} 
-            --micro-name=${{ github.event.inputs.micro_name }} 
-            --image=${{ github.event.inputs.image }} 
-            --back-name=${{ github.event.inputs.back_name }} 
-            --replicas=${{ github.event.inputs.replicas }} 
-            --new-micro-repo=${{ github.event.inputs.new_micro_repo }} 
+          devbox run bancli service back-db new \
+            --businessflow-name="${{ github.event.inputs.businessflow_name }}" \
+            --micro-name="${{ github.event.inputs.micro_name }}" \
+            --image="${{ github.event.inputs.image }}" \
+            --back-name="${{ github.event.inputs.back_name }}" \
+            --replicas="${{ github.event.inputs.replicas }}" \ 
+            --new-micro-repo="${{ github.event.inputs.new_micro_repo }}" 
