@@ -58,9 +58,8 @@ jobs:
         working-directory: platform-engineering/CLI
         run: >
           devbox run bancli service back-db new
-          --businessflow-name="${{ parameters.businessflow_name }}"
-          --micro-name="${{ parameters.micro_name }}"
-          --image="${{ parameters.image }}"
-          --back-name="${{ parameters.back_name }}"
-          --replicas="${{ parameters.replicas }}"
-          --new-micro-repo="${{ parameters.new_micro_repo }}"
+          --businessflow-name="${{ github.event.inputs.businessflow_name }}"
+          --image="${{ github.event.inputs.image }}"
+          --back-name="${{ github.event.inputs.back_name }}"
+          --replicas="${{ github.event.inputs.replicas }}"
+          --new-micro-repo="${{ github.event.inputs.new_micro_repo }}"
