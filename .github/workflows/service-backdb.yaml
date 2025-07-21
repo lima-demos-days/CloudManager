@@ -1,26 +1,27 @@
-name: new-businessflow
-description: Define y configura un nuevo flujo de negocio (levanta infra, repos, etc)
+name: new-backdb
+description: Define y configura un nuevo microservicio vinculado al flujo de negocio
 
 on:
   workflow_dispatch:
     inputs:
-      name:
+      businessflow_name:
         required: true
         description: Nombre del flujo de negocio
-      description:
-        description: Descripción del flujo
-      instance_type: 
+      micro_name:
+        description: Nombre del microservicio
+      image: 
         required: true
-        description: Tipo de instancia cloud (nodos)
-      cidr:
+        description: Imagen base de los contenedores
+      back_name:
         required: true
-        description: Rango de conexiones de red
-      min_size: 
-        description: Tamaño mínimo de nodos
-      max_size:
-        description: Tamaño máximo de nodos
-      desired_size: 
-        description: Tamaño deseado
+        description: Nombre base del backend (inclye BD)
+      replicas: 
+        required: true
+        description: Numero de replicas
+      new_micro_repo:
+        required: true
+        description: Define si crea o no un nuevo repositorio para el microservicio
+        
 
 jobs:
   build:
@@ -56,11 +57,10 @@ jobs:
       - name: Define new businessflow
         working-directory: platform-engineering/CLI
         run: |
-          devbox run bancli businessflow new 
-            --name=${{ github.event.inputs.name }} 
-            --description=${{ github.event.inputs.description }}
-            --instance-type=${{ github.event.inputs.instance_type }}
-            --cidr=${{ github.event.inputs.cidr }}
-            --min-size=${{ github.event.inputs.min_size }}
-            --max-size=${{ github.event.inputs.max_size }}
-            --desired-size=${{ github.event.inputs.desired_size }}
+          devbox run bancli service back-db new
+            --businessflow-name=${{ github.event.inputs.businessflow_name }} 
+            --micro-name=${{ github.event.inputs.micro_name }} 
+            --image=${{ github.event.inputs.image }} 
+            --back-name=${{ github.event.inputs.back_name }} 
+            --replicas=${{ github.event.inputs.replicas }} 
+            --new-micro-repo=${{ github.event.inputs.new_micro_repo }} 
