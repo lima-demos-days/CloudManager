@@ -8,18 +8,25 @@ def "main ops back-db new" [
     --replicas:number                                       #Número de replicas
     --image:string                                          #Imagen base de los contenedores
     --region:string = "us-east-1"                           #Región cloud
-    --host:string = "https://github.com/jdarguello/"        #Dirección base de repositorios
+    --host:string = "github.com"                            #Dirección base de repositorios
     --path:string="infra/platform-engineering/components"   #Path base de GitOps
+    --github-workflow = false                               #¿Es un workflow de GitHub?
 ] {
     #0. Adecuar carpetas
     let current_directory = pwd
-    mkdir tmp 
-    cd tmp
 
-    #1. Clonar el businessflow repo y entrar al micro
     let repo_name = $"($businessflow_name)-Businessflow"
-    let repo_url = $host + $repo_name
-    git clone $repo_url
+    if (not $github_workflow) {
+        mkdir tmp 
+        cd tmp
+
+        #1. Clonar el businessflow repo y entrar a él
+        let repo_url = $"https://($env.GITHUB_USER):($env.GITHUB_TOKEN)@($host)/jdarguello/($repo_name)"
+        git clone $repo_url
+    } else {
+        cd tmp
+    }
+    
     cd $repo_name
     cd $path
     cd $micro_name

@@ -102,6 +102,7 @@ def "main businessflow delete" [
 def "main businessflow micro new" [
     --businessflow-name:string              #Nombre del flujo de negocio
     --micro-name:string                     #Nombre del microservicio
+    --github-workflow = false               #¿Es un workflow de GitHub?
 ] {
     #1. Crear el repositorio
     main github new-micro --name $micro_name
@@ -121,10 +122,11 @@ def "main service back-db new" [
     --back-name:string = ""                 #Nombre del backend
     --replicas:number = 1
     --new-micro-repo = true                           #¿Nuevo microservicio?
+    --github-workflow = false               #¿Es un workflow de GitHub?
 ] {
     #1. Si es un nuevo microservicio, creelo y vinculelo
     if ($new_micro_repo) {
-        main businessflow micro new --businessflow-name=$businessflow_name --micro-name=$micro_name
+        main businessflow micro new --businessflow-name=$businessflow_name --micro-name=$micro_name --github-workflow=$github_workflow
     }
 
     #2. El backend debe tener nombre
@@ -134,7 +136,7 @@ def "main service back-db new" [
     }
 
     #3. Levantar manifiestos de crossplane en el micro
-    main ops back-db new --image=$image --replicas=$replicas --backend-name=$backdb_name --micro-name=$micro_name --businessflow-name=$businessflow_name 
+    main ops back-db new --image=$image --replicas=$replicas --backend-name=$backdb_name --micro-name=$micro_name --businessflow-name=$businessflow_name --github-workflow=$github_workflow 
 }
 
 #Actualización de microservicio creado con base de datos

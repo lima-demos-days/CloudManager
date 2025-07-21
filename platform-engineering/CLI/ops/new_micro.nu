@@ -8,16 +8,23 @@ def --env "main ops new-micro" [
     --micro-name:string                                     #Nombre del microservicio
     --host:string = "github.com"                   #Dirección base de repositorios
     --path:string="infra/platform-engineering/components"    #Path base de GitOps
+    --github-workflow = false
 ] {
     #0. Adecuar carpetas
     let current_directory = pwd
-    mkdir tmp 
-    cd tmp
 
-    #1. Clonar el businessflow repo y entrar a él
     let repo_name = $"($businessflow_name)-Businessflow"
-    let repo_url = $"https://($env.GITHUB_USER):($env.GITHUB_TOKEN)@($host)/jdarguello/($repo_name)"
-    git clone $repo_url
+    if (not $github_workflow) {
+        mkdir tmp 
+        cd tmp
+
+        #1. Clonar el businessflow repo y entrar a él
+        let repo_url = $"https://($env.GITHUB_USER):($env.GITHUB_TOKEN)@($host)/jdarguello/($repo_name)"
+        git clone $repo_url
+    } else {
+        cd tmp
+    }
+    
     cd $repo_name
     cd $path
 
