@@ -63,4 +63,4 @@ jobs:
             --image="${{ github.event.inputs.image }}" \
             --back-name="${{ github.event.inputs.back_name }}" \
             --replicas="${{ github.event.inputs.replicas }}" \ 
-            --new-micro-repo="${{ github.event.inputs.new_micro_repo }}" 
+            --new-micro-repo=${{ github.event.inputs.new_micro_repo }}
