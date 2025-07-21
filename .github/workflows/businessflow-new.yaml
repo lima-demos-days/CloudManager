@@ -56,11 +56,11 @@ jobs:
       - name: Define new businessflow
         working-directory: platform-engineering/CLI
         run: |
-          devbox run bancli businessflow new 
-            --name=${{ github.event.inputs.name }} 
-            --description=${{ github.event.inputs.description }}
-            --instance-type=${{ github.event.inputs.instance_type }}
-            --cidr=${{ github.event.inputs.cidr }}
-            --min-size=${{ github.event.inputs.min_size }}
-            --max-size=${{ github.event.inputs.max_size }}
-            --desired-size=${{ github.event.inputs.desired_size }}
+          devbox run bancli businessflow new \
+            --name="${{ github.event.inputs.name }}" \
+            --description="${{ github.event.inputs.description }}" \
+            --instance-type="${{ github.event.inputs.instance_type }}" \
+            --cidr="${{ github.event.inputs.cidr }}" \
+            --min-size="${{ github.event.inputs.min_size }}" \
+            --max-size="${{ github.event.inputs.max_size }}" \
+            --desired-size="${{ github.event.inputs.desired_size }}"
