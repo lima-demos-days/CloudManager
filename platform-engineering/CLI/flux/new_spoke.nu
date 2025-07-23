@@ -46,11 +46,13 @@ def --env "main flux new-spoke" [
 
     $spoke_management | save spoke-manegement.yaml --force
 
-    #5. Subir los cambios al repo
+    #5. Regresar al directorio original
+    cd $current_directory
+
+    #6. Subir los cambios al repo
     main github push manager --spoke-name $spoke_name
 
-    #6. Regresar al directorio original
-    cd $current_directory
+    
 }
 
 def "flux reconcile" [] {
