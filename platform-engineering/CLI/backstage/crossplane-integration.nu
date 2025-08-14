@@ -134,13 +134,13 @@ backend.start();`
 
 def --env "main build backstage" [
     tag: string
-    --image = "ghcr.io/jdarguello/idp-full-backstage"
+    --image = "ghcr.io/jdarguello/cloudmanager"
     --github_org = "jdarguello"
 ] {
 
     docker login $image
 
-    cd backstage
+    cd ../IdP/CloudManager-IdP/backstage
 
     yarn install --immutable
 
@@ -169,28 +169,12 @@ def --env "main build backstage" [
         | upsert image.repository $image
         | upsert image.tag $tag
         | save charts/backstage/values.yaml --force
+    
+    print "charts"
 
     helm package charts/backstage
 
     helm push $"backstage-($tag).tgz" $"oci://ghcr.io/($image)"
-
-    start $"https://github.com/users/($github_org)/packages/container/package/idp-full-backstage"
-
-    print $"
-Click (ansi yellow_bold)Package settings(ansi reset).
-Click the (ansi yellow_bold)Change visibility(ansi reset) button, select (ansi yellow_bold)Public(ansi reset), type (ansi yellow_bold)idp-full-backstage(ansi reset) to confirm, and click the (ansi yellow_bold)I understand the consequences, change package visibility(ansi reset) button.
-Press the (ansi yellow_bold)enter key(ansi reset) to continue.
-"
-    input
-
-    start $"https://github.com/users/($github_org)/packages/container/package/idp-full-backstage%2Fbackstage"
-
-    print $"
-Click (ansi yellow_bold)Package settings(ansi reset).
-Click the (ansi yellow_bold)Change visibility(ansi reset) button, select (ansi yellow_bold)Public(ansi reset), type (ansi yellow_bold)idp-full-backstage/backstage(ansi reset) to confirm, and click the (ansi yellow_bold)I understand the consequences, change package visibility(ansi reset) button.
-Press the (ansi yellow_bold)enter key(ansi reset) to continue.
-"
-    input
 
     rm $"backstage-($tag).tgz"
 
