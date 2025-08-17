@@ -21,7 +21,14 @@ on:
       new_micro_repo:
         required: true
         description: Define si crea o no un nuevo repositorio para el microservicio
-        
+      aws_access_key_id:
+        required: true
+      aws_secret_access_key:
+        required: true
+      token_github:
+        required: true
+      username_github:
+        required: true
 
 jobs:
   build:
@@ -38,10 +45,10 @@ jobs:
       - name: Create .env file
         working-directory: platform-engineering/CLI
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
-          GITHUB_USER: ${{ secrets.USER_GITHUB }}
+          AWS_ACCESS_KEY_ID: ${{ github.event.inputs.aws_access_key_id }}
+          AWS_SECRET_ACCESS_KEY: ${{ github.event.inputs.aws_secret_access_key }}
+          GITHUB_TOKEN: ${{ github.event.inputs.token_github }}
+          GITHUB_USER: ${{ github.event.inputs.username_github }}
         run: |
           echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" > .env
           echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" >> .env
