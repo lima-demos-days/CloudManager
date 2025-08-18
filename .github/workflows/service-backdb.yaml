@@ -63,7 +63,7 @@ jobs:
           devbox-version: 0.15.0
           project-path: 'platform-engineering/CLI'
       
-      - name: Define new businessflow
+      - name: Define new backdb
         working-directory: platform-engineering/CLI
         run: |
           devbox run bancli service back-db new \
