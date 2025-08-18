@@ -21,7 +21,7 @@ def "github newrepo" [
     --public = true           #Tipo de repo (públic/privado)
     --description: string = ""      #(Opcional) Descripción del repo
 ] {
-    let repo_name = "jdarguello/" + $name
+    let repo_name = "lima-demos-days/" + $name
     
     if $public {
         gh repo create $repo_name --template $template --public --description $description

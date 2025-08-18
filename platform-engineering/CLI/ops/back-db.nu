@@ -19,7 +19,7 @@ def "main ops back-db new" [
     cd tmp
 
     #1. Clonar el businessflow repo y entrar a él
-    let repo_url = $"https://($env.GITHUB_USER):($env.GITHUB_TOKEN)@($host)/jdarguello/($repo_name)"
+    let repo_url = $"https://($env.GITHUB_USER):($env.GITHUB_TOKEN)@($host)/lima-demos-days/($repo_name)"
     git clone $repo_url
     
     cd $repo_name

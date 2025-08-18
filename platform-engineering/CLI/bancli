@@ -78,7 +78,7 @@ def "main businessflow new" [
     #5. Definición del nuevo 'spoke' en CloudManager
     if (not $existing_infra) {
         let spoke_name = $name | str downcase
-        main flux new-spoke --spoke-name=$spoke_name --spoke-ns=$"($spoke_name)-cluster" --git-url=$"https://github.com/jdarguello/($name)-Businessflow" --git-ref="main" --git-branch="main" --flux-path="infra/gitops"
+        main flux new-spoke --spoke-name=$spoke_name --spoke-ns=$"($spoke_name)-cluster" --git-url=$"https://github.com/lima-demos-days/($name)-Businessflow" --git-ref="main" --git-branch="main" --flux-path="infra/gitops"
     }
 
     #6. Bootstrap de FluxCD

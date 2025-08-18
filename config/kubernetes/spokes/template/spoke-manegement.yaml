@@ -17,6 +17,6 @@ spec:
   postBuild:
     substitute:
       SPOKE_NS: inversiones-cluster
-      GIT_URL: "https://github.com/jdarguello/CDT_Businessflow"
+      GIT_URL: "https://github.com/lima-demos-days/CDT_Businessflow"
       GIT_REF: "main"
       FLUX_PATH: "./infra/gitops"

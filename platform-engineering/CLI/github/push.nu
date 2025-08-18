@@ -21,8 +21,8 @@ def "main git push" [
     --commit-msg:string
 ] {
     git pull
-    git config --global user.email "jdarguello"
-    git config --global user.name "Juan David Arguello"
+    git config --global user.email "lima-demos-days"
+    git config --global user.name "Lima Demos Days"
     git add .
     git commit -m $commit_msg
     git push

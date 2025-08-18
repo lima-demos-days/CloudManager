@@ -2,7 +2,7 @@ source new_repo.nu
 
 def "main github new-micro" [
     --name: string                                              #Nombre del flujo de negocio
-    --template:string = "jdarguello/micro-template"      #Template base para flujos de negocio
+    --template:string = "lima-demos-days/micro-template"      #Template base para flujos de negocio
     --description:string = ""                                   #(Opcional) Descripción del flujo de negocio
 ] {
     #1. Autenticación

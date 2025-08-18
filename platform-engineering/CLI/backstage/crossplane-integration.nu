@@ -134,8 +134,8 @@ backend.start();`
 
 def --env "main build backstage" [
     tag: string
-    --image = "ghcr.io/jdarguello/cloudmanager"
-    --github_org = "jdarguello"
+    --image = "ghcr.io/lima-demos-days/cloudmanager"
+    --github_org = "lima-demos-days"
 ] {
 
     docker login $image

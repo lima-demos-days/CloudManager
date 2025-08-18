@@ -4,7 +4,7 @@ source ../aws/cluster-ref.nu
 def "main flux bootstrap" [
     --repository:string = "CloudManager"
     --cluster-name:string = "Manager-Cluster"
-    --owner:string = "jdarguello"
+    --owner:string = "lima-demos-days"
     --branch:string = "main"
     --path:string = "infra/gitops"
 ] {

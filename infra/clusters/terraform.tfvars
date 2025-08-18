@@ -1,5 +1,5 @@
 flux-setup = {
-  git_url         = "https://github.com/jdarguello/CloudManager"
+  git_url         = "https://github.com/lima-demos-days/CloudManager"
   git_path        = "config/kubernetes/manager"
   git_ref         = "refs/heads/main"
   flux_version    = "2.x"
