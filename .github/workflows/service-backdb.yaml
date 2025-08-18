@@ -38,7 +38,7 @@ jobs:
       - name: Checkout Manager
         uses: actions/checkout@v4
         with:
-          submodules: 'true'
+          submodules: 'false'
           token: ${{ github.event.inputs.token_github }}
           fetch-depth: 0
 
